@@ -27,4 +27,4 @@ Tracker: $(TRACKER_OBJS)
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 
 clean:
-	rm Tracker $(OBJS)
+	rm Tracker $(TRACKER_OBJS)

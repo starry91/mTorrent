@@ -14,6 +14,7 @@
 #include <fstream>
 #include <mutex>
 #include <condition_variable>
+#include <syslog.h>
 
 std::mutex seeder_mtx;             // mutex for critical section
 std::condition_variable seeder_cv; // condition variable for critical section
@@ -170,15 +171,16 @@ void TrackerHandler::readSeederfile(std::string file)
             std::vector<seeder_Sptr> seeds;
             if (std::getline(input, line))
             {
-                file_name = std::string(file_name);
+                file_name = std::string(line);
             }
             if (std::getline(input, line))
             {
-                file_name = std::string(file_name);
+                hash = std::string(line);
             }
             while (std::getline(input, line))
             {
-                if (std::string(line) != "\n")
+                syslog(0, "seeder: [%s]", line.c_str());
+                if (std::string(line) != "")
                     seeds.push_back(std::make_shared<Seeder>(Seeder(std::string(line))));
                 else
                     break;
@@ -187,6 +189,9 @@ void TrackerHandler::readSeederfile(std::string file)
                 this->files[hash] = std::make_shared<FileAttr>(FileAttr(file_name, hash, seeds));
             if (input.eof())
                 eof = true;
+            syslog(0, "eof: %d", eof);
+            syslog(0, "Filename: %s Hash: %s, seeds: %d", file_name.c_str(), hash.c_str(), seeds.size());
+            //syslog(0, "Seeder: %s", seeds[6]);
         }
         input.close();
     }
