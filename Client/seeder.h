@@ -10,15 +10,11 @@
 #include <vector>
 #include <memory>
 
-class Seeder
-{
+class Seeder {
     std::string ip;
     std::string port;
-
-  public:
+    public:
     Seeder(std::string ip, std::string port);
-    Seeder(std::string ip_port);
-    Seeder();
     std::string getIp();
     std::string getPort();
     //std::string file_path;

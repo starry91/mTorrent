@@ -11,18 +11,18 @@
 
 class FileAttr
 {
-    std::string hash;
-    //int file_size;
-    std::vector<seeder_Sptr> seeds;
+  std::string file_name;
+  std::string hash;
+  std::vector<seeder_Sptr> seeds;
 
-  public:
-    FileAttr(std::string hash);
-    FileAttr(std::string hash, std::vector<seeder_Sptr>);
-    FileAttr(std::string hash, std::shared_ptr<Seeder>);
-    void addSeeder(seeder_Sptr);
-    void removeSeeder(seeder_Sptr);
-    int getSeederCount();
-    std::string getHash();
+public:
+  FileAttr(std::string file_name, std::string hash, std::shared_ptr<Seeder>);
+  FileAttr(std::string file_name, std::string hash, std::vector<seeder_Sptr>);
+  void addSeeder(seeder_Sptr);
+  void removeSeeder(seeder_Sptr);
+  int getSeederCount();
+  std::vector<seeder_Sptr> getSeeds();
+  std::string getFileName();
 };
 
 #endif

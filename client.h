@@ -6,11 +6,13 @@
 
 #include <string>
 #include <iostream>
+#include <seeder.h>
 
 class Client {
     int fd;
     public:
     std::string extractPayload();
+    void sendSeederData(std::vector<seeder_Sptr> seeds);
     Client(int fd);
 };
 
