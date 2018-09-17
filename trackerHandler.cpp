@@ -80,22 +80,23 @@ void TrackerHandler::startListening()
 void TrackerHandler::serviceRequest(int client_fd)
 {
     Client client(client_fd);
-    if (client.extractPayload() == "add_file")
+    std::string request = client.extractPayload();
+    if (request == "add_file")
     {
         std::cout << "hello1" << std::endl;
         add_file(client_fd);
     }
-    else if (client.extractPayload() == "add_seeder")
+    else if (request == "add_seeder")
     {
         std::cout << "hello2" << std::endl;
         add_seeder(client_fd);
     }
-    else if (client.extractPayload() == "remove_seeder")
+    else if (request == "remove_seeder")
     {
         std::cout << "hello3" << std::endl;
         remove_seeder(client_fd);
     }
-    else if (client.extractPayload() == "get_seeds")
+    else if (request == "get_seeds")
     {
         std::cout << "hello4" << std::endl;
         add_seeder(client_fd);
@@ -126,11 +127,19 @@ void TrackerHandler::add_seeder(int fd)
     std::string hash = client.extractPayload();
     std::string ip = client.extractPayload();
     std::string port = client.extractPayload();
+    syslog(0, "entering add seeder");
     auto seeder = std::make_shared<Seeder>(Seeder(ip, port));
+    syslog(0, "seeder created");
     {
         std::lock_guard<std::mutex> lock(seeder_mtx);
-        auto file = this->files[hash];
-        file->addSeeder(seeder);
+        syslog(0, "lock taken");
+        if (this->files.find(hash) != this->files.end())
+        {
+            auto &file = this->files[hash];
+            syslog(0, "Seed Count: %d", file->getSeederCount());
+            file->addSeeder(seeder);
+            syslog(0, "Seed Count: %d", file->getSeederCount());
+        }
     }
 }
 
@@ -138,15 +147,26 @@ void TrackerHandler::remove_seeder(int fd)
 {
     Client client(fd);
     std::string hash = client.extractPayload();
+    syslog(0, "hash: %s", hash.c_str());
     std::string ip = client.extractPayload();
+    syslog(0, "ip: %s", ip.c_str());
     std::string port = client.extractPayload();
+    syslog(0, "port: %s", port.c_str());
     auto seeder = std::make_shared<Seeder>(Seeder(ip, port));
+    syslog(0, "seeder ip: %s", seeder->getIp().c_str());
     {
         std::lock_guard<std::mutex> lock(seeder_mtx);
-        this->files[hash]->removeSeeder(seeder);
-        if (this->files[hash]->getSeederCount() == 0)
+        if (this->files.find(hash) != this->files.end())
         {
-            this->files.erase(hash);
+            auto &file = this->files[hash];
+            syslog(0, "Seed Count: %d", file->getSeederCount());
+            file->removeSeeder(seeder);
+            syslog(0, "Seed Count: %d", file->getSeederCount());
+            if (file->getSeederCount() == 0)
+            {
+                syslog(0, "Removing hash");
+                this->files.erase(hash);
+            }
         }
     }
 }
@@ -198,6 +218,17 @@ void TrackerHandler::readSeederfile(std::string file)
             //syslog(0, "Seeder: %s", seeds[6]);
         }
         input.close();
+    }
+    for (auto it = this->files.begin(); it != this->files.end(); it++)
+    {
+        syslog(0, "read Hash: %s", it->first.c_str());
+        auto file = it->second;
+        auto seeds = file->getSeeds();
+        for (auto it1 = seeds.begin(); it1 != seeds.end(); it1++)
+        {
+            syslog(0, "read ip: %s", (*it1)->getIp().c_str());
+            syslog(0, "read port: %s", (*it1)->getPort().c_str());
+        }
     }
 }
 

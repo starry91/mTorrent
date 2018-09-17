@@ -39,32 +39,32 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-    char key[1024] = "add_file";
+    char key[1024] = "remove_seeder";
     printf(" file len: %d", strlen(key));
     long key_count = htonl(strlen(key));
     printf(" file len: %d", key_count);
     send(sock, &key_count, sizeof(key_count), 0);
     send(sock, key, strlen(key), 0);
 
-    char buff[1024] = "sample.txt";
-    long byte_count = htonl(strlen(buff));
-    printf(" file len: %d", byte_count);
-    send(sock, &byte_count, sizeof(byte_count), 0);
-    send(sock, buff, strlen(buff), 0);
+    // char buff[1024] = "sample.txt";
+    // long byte_count = htonl(strlen(buff));
+    // printf(" file len: %d", byte_count);
+    // send(sock, &byte_count, sizeof(byte_count), 0);
+    // send(sock, buff, strlen(buff), 0);
 
-    char hash[] = "randomhashdsadsa##";
+    char hash[] = "35ds43342##433";
     long hash_count = htonl(strlen(hash));
-    printf(" hash len: %d", byte_count);
+    printf(" hash len: %d", strlen(hash));
     send(sock, &hash_count, sizeof(hash_count), 0);
     send(sock, hash, strlen(hash), 0);
 
-    char ip[1024] = "10.9.9.108";
+    char ip[1024] = "191.144.34.23";
     long ip_count = htonl(strlen(ip));
     printf(" file len: %d", ip_count);
     send(sock, &ip_count, sizeof(ip_count), 0);
     send(sock, ip, strlen(ip), 0);
 
-    char port[] = "1994";
+    char port[] = "9897";
     long port_count = htonl(strlen(port));
     printf(" hash len: %d", port_count);
     send(sock, &port_count, sizeof(port_count), 0);
