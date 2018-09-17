@@ -82,18 +82,22 @@ void TrackerHandler::serviceRequest(int client_fd)
     Client client(client_fd);
     if (client.extractPayload() == "add_file")
     {
+        std::cout << "hello1" << std::endl;
         add_file(client_fd);
     }
     else if (client.extractPayload() == "add_seeder")
     {
+        std::cout << "hello2" << std::endl;
         add_seeder(client_fd);
     }
     else if (client.extractPayload() == "remove_seeder")
     {
+        std::cout << "hello3" << std::endl;
         remove_seeder(client_fd);
     }
     else if (client.extractPayload() == "get_seeds")
     {
+        std::cout << "hello4" << std::endl;
         add_seeder(client_fd);
     }
 }
@@ -179,7 +183,7 @@ void TrackerHandler::readSeederfile(std::string file)
             }
             while (std::getline(input, line))
             {
-                syslog(0, "seeder: [%s]", line.c_str());
+                //syslog(0, "seeder: [%s]", line.c_str());
                 if (std::string(line) != "")
                     seeds.push_back(std::make_shared<Seeder>(Seeder(std::string(line))));
                 else
@@ -189,8 +193,8 @@ void TrackerHandler::readSeederfile(std::string file)
                 this->files[hash] = std::make_shared<FileAttr>(FileAttr(file_name, hash, seeds));
             if (input.eof())
                 eof = true;
-            syslog(0, "eof: %d", eof);
-            syslog(0, "Filename: %s Hash: %s, seeds: %d", file_name.c_str(), hash.c_str(), seeds.size());
+            //syslog(0, "eof: %d", eof);
+            //syslog(0, "Filename: %s Hash: %s, seeds: %d", file_name.c_str(), hash.c_str(), seeds.size());
             //syslog(0, "Seeder: %s", seeds[6]);
         }
         input.close();
