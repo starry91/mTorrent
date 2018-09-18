@@ -17,13 +17,14 @@ class ClientHandler
 
   public:
     ClientHandler(seeder_Sptr, seeder_Sptr, seeder_Sptr);
-    void createMTorrent(std::string local_file, std::string torrent_name);
+    void createMTorrent(mTorrent_Sptr);
     std::vector<std::string> extractArgs(std::string);
     void shareFile(std::string file_name);
     void startListening();
     void serviceRequest(int client_fd);
     void handleCommand(std::string command);
     std::string getFileHash(std::string file);
+    void addMTorrent(mTorrent_Sptr);
 };
 
 #endif

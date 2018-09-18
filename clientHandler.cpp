@@ -6,6 +6,9 @@
 #include <math.h>
 #include "openssl/sha.h"
 #include <syslog.h>
+#include "mtorrent.h"
+#include <memory>
+
 #define CHUNK_SIZE 524288
 
 ClientHandler::ClientHandler(seeder_Sptr host, seeder_Sptr tracker1, seeder_Sptr tracker2)
@@ -39,15 +42,39 @@ void ClientHandler::handleCommand(std::string command)
     }
     if (args[0] == "share")
     {
-        std::cout << this->getFileHash(args[1]) << std::endl;
+        std::ifstream file;
+        file.open(args[1], std::ios::in | std::ios::binary);
+        file.ignore(std::numeric_limits<std::streamsize>::max());
+        std::streamsize file_size = file.gcount();
+        file.close();
 
+        std::string file_hash = this->getFileHash(args[1]);
+        std::cout << file_hash << std::endl;
+        std::string bit_chunks = "";
+        for (int i = 0; i < file_hash.length() / SHA_DIGEST_LENGTH; i++)
+        {
+            bit_chunks += "1";
+        }
+        auto mtorr = std::make_shared<mTorrent>(mTorrent(args[1], file_hash, args[2], file_size, bit_chunks));
+        this->createMTorrent(mtorr);
+        this->addMTorrent(mtorr);
         // this->createMTorrent
         //     std::thread t1(&ClientHandler::shareFile, this, args[1]);
     }
 }
 
-void ClientHandler::createMTorrent(std::string local_file, std::string torrent_name)
+void ClientHandler::createMTorrent(mTorrent_Sptr torr)
 {
+    std::ofstream myfile(torr->getfileName().c_str());
+    if (myfile.is_open())
+    {
+        syslog(0, "Writing file to: [%s]", torr->getPath().c_str());
+        myfile << torr->getHash() << "\n";
+        myfile << torr->getPath() << "\n";
+        myfile << this->host->getIp() << "\n";
+        myfile << this->host->getPort();
+    }
+    myfile.close();
 }
 
 std::string ClientHandler::getFileHash(std::string file_name)
@@ -90,4 +117,12 @@ std::string ClientHandler::getFileHash(std::string file_name)
         syslog(0, "Chunk Hash: [%s]", chunk_hash.c_str());
     }
     return hash;
+}
+
+void ClientHandler::addMTorrent(mTorrent_Sptr torr)
+{
+    if (this->files.find(torr->getHash()) == this->files.end())
+    {
+        this->files[torr->getHash()] = torr;
+    }
 }
