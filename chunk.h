@@ -6,13 +6,16 @@
 
 #include <string>
 #include <iostream>
-
-class Chunk {
+#include <memory>
+class Chunk
+{
     int begin;
     int offset;
     Chunk();
     Chunk(int begin, int offset);
     int getIndex();
 };
+
+typedef std::shared_ptr<Chunk> chunk_Sptr;
 
 #endif
