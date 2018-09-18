@@ -99,7 +99,7 @@ void TrackerHandler::serviceRequest(int client_fd)
     else if (request == "get_seeds")
     {
         std::cout << "hello4" << std::endl;
-        add_seeder(client_fd);
+        sendSeedList(client_fd);
     }
 }
 
@@ -176,6 +176,7 @@ void TrackerHandler::sendSeedList(int fd)
 
     Client client(fd);
     std::string hash = client.extractPayload();
+    syslog(0, "Extracted Payload: [%s]",hash.c_str());
     {
         std::lock_guard<std::mutex> lock(seeder_mtx);
         client.sendSeederData(this->files[hash]->getSeeds());

@@ -5,9 +5,11 @@
 #include "trackerHandler.h"
 #include <thread>
 #include <sstream>
+#include <syslog.h>
 
 int main(int argc, char *argv[])
 {
+    syslog(0,"--------------------------------------------------");
     if (argc < 5)
     {
         std::cerr << "Not enough arguments" << std::endl;
