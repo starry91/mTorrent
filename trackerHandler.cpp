@@ -79,27 +79,30 @@ void TrackerHandler::startListening()
 
 void TrackerHandler::serviceRequest(int client_fd)
 {
-    Client client(client_fd);
-    std::string request = client.extractPayload();
-    if (request == "add_file")
+    while (true)
     {
-        std::cout << "hello1" << std::endl;
-        add_file(client_fd);
-    }
-    else if (request == "add_seeder")
-    { 
-        std::cout << "hello2" << std::endl;
-        add_seeder(client_fd);
-    }
-    else if (request == "remove_seeder")
-    {
-        std::cout << "hello3" << std::endl;
-        remove_seeder(client_fd);
-    }
-    else if (request == "get_seeds")
-    {
-        std::cout << "hello4" << std::endl;
-        sendSeedList(client_fd);
+        Client client(client_fd);
+        std::string request = client.extractPayload();
+        if (request == "add_file")
+        {
+            std::cout << "hello1" << std::endl;
+            add_file(client_fd);
+        }
+        else if (request == "add_seeder")
+        {
+            std::cout << "hello2" << std::endl;
+            add_seeder(client_fd);
+        }
+        else if (request == "remove_seeder")
+        {
+            std::cout << "hello3" << std::endl;
+            remove_seeder(client_fd);
+        }
+        else if (request == "get_seeds")
+        {
+            std::cout << "hello4" << std::endl;
+            sendSeedList(client_fd);
+        }
     }
 }
 
@@ -176,7 +179,7 @@ void TrackerHandler::sendSeedList(int fd)
 
     Client client(fd);
     std::string hash = client.extractPayload();
-    syslog(0, "Extracted Payload: [%s]",hash.c_str());
+    syslog(0, "Extracted Payload: [%s]", hash.c_str());
     {
         std::lock_guard<std::mutex> lock(seeder_mtx);
         client.sendSeederData(this->files[hash]->getSeeds());

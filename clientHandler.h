@@ -9,22 +9,26 @@
 
 class ClientHandler
 {
-    seeder_Sptr host;
-    seeder_Sptr tracker1;
-    seeder_Sptr tracker2;
-    std::string log_path;
-    std::map<std::string, mTorrent_Sptr> files;
+  seeder_Sptr host;
+  seeder_Sptr tracker1;
+  seeder_Sptr tracker2;
+  int tracker_fd;
+  std::string log_path;
+  std::map<std::string, mTorrent_Sptr> files;
 
-  public:
-    ClientHandler(seeder_Sptr, seeder_Sptr, seeder_Sptr);
-    void createMTorrent(mTorrent_Sptr);
-    std::vector<std::string> extractArgs(std::string);
-    void shareFile(std::string file_name);
-    void startListening();
-    void serviceRequest(int client_fd);
-    void handleCommand(std::string command);
-    std::string getFileHash(std::string file);
-    void addMTorrent(mTorrent_Sptr);
+public:
+  ClientHandler(seeder_Sptr, seeder_Sptr, seeder_Sptr);
+  void createMTorrent(mTorrent_Sptr);
+  std::vector<std::string> extractArgs(std::string);
+  void shareFile(std::vector<std::string> args);
+  void startListeningToPeers();
+  void serviceRequest(int client_fd);
+  void handleCommand(std::string command);
+  std::string getFileHash(std::string file);
+  void addMTorrent(mTorrent_Sptr);
+  void shareToTracker(std::string);
+  void connectToTracker();
+  std::vector<seeder_Sptr> getSeeders(std::string file_path);
 };
 
 #endif

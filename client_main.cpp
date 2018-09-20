@@ -37,14 +37,15 @@ int main(int argc, char *argv[])
     std::cout << "hello" << std::endl;
     std::cout << "ip: " << tracker1->getIp() << " port: " << tracker1->getPort() << std::endl;
     std::cout << "ip: " << tracker2->getIp() << " port: " << tracker2->getPort() << std::endl;
-    ClientHandler handler(host, tracker1, tracker2);
+    ClientHandler * handler = new ClientHandler(host, tracker1, tracker2);
     while (true)
     {
         syslog(0, "hello");
         std::string command;
         std::getline(std::cin, command);
         syslog(0, "command: [%s]", command.c_str());
-        handler.handleCommand(command);
+        std::thread t1(&ClientHandler::handleCommand, handler, command);
+        t1.detach();
         //std::cin.ignore();
     }
 }
