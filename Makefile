@@ -1,35 +1,16 @@
 #Name: Praveen Balireddy
 #Roll: 2018201052
 
-PROJECT_ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+export PROJECT_ROOT := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
-TRACKER_OBJS =  main.o trackerHandler.o seeder.o fileAttr.o client.o 
-CLIENT_OBJS = client_main.o clientHandler.o mtorrent.o seeder.o chunk.o client.o
-CFLAGS = -I.
-LDIR = -L.
-LIBS =  -pthread -lpthread
-CLIENT_LIBS = -lcrypto -lssl -pthread -lpthread
-CFLAGS += -g
-#ifeq ($(BUILD_MODE),debug)
-#	CFLAGS += -g
-##	CFLAGS += -O2
-#else
-#	$(error Build mode $(BUILD_MODE) not supported by this Makefile)
-#endif
+#TRACKER_OBJS =  main.o trackerHandler.o seeder.o fileAttr.o client.o 
 
-all: Client_run Tracker 
+SUBDIRS := common/ torrentclient/ torrenttracker/
+TOPTARGETS := all clean
 
-Tracker: $(TRACKER_OBJS)
-	$(CXX) -o $@ $^ $(LIBS)
+$(TOPTARGETS): $(SUBDIRS)
 
-Client_run: $(CLIENT_OBJS)
-	$(CXX) -o $@ $^ $(CLIENT_LIBS)
+$(SUBDIRS):
+	$(MAKE) -C $@ $(MAKECMDGOALS)
 
-%.o:	$(PROJECT_ROOT)%.cpp $(PROJECT_ROOT)%.h
-	$(CXX) -c $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS)  $(LDIR) -o $@ $< 
-
-%.o:	$(PROJECT_ROOT)%.c $(PROJECT_ROOT)%.h
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
-
-clean:
-	rm Tracker $(TRACKER_OBJS)
+.PHONY: $(TOPTARGETS) $(SUBDIRS)
