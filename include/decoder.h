@@ -12,5 +12,7 @@
 
 class Decoder {
     public:
-    std::shared_ptr<Message> decode()
-}
+    std::shared_ptr<Message> decode(std::vector<char>);
+};
+
+#endif

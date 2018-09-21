@@ -11,6 +11,10 @@
 Share::Share(std::vector<char> b)
 {
   {
+    uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    b.erase(b.begin(), b.begin() + 4 + type_size);
+  }
+  {
     uint32_t name_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
     this->file_name = std::string(&b[4], &b[4 + name_size]);
     b.erase(b.begin(), b.begin() + 4 + name_size);
@@ -59,17 +63,26 @@ std::string Share::getPort()
 
 std::string Share::getType()
 {
-  return std::string("share");
+  return std::string("SHARE");
 }
 
 std::vector<char> Share::getBytes()
 {
   std::vector<char> buf;
-  uint32_t size = this->file_name.size();
+  uint32_t size = this->type.size();
   buf = uint32tonv(size);
-  for (auto i : this->file_name)
+  for (auto i : this->type)
   {
     buf.push_back(i);
+  }
+
+  {
+    auto tmp = uint32tonv(this->file_name.size());
+    buf.insert(buf.end(), tmp.begin(), tmp.end());
+    for (auto i : this->file_name)
+    {
+      buf.push_back(i);
+    }
   }
 
   {
@@ -125,6 +138,10 @@ void Share::setPort(std::string port)
 AddSeeder::AddSeeder(std::vector<char> b)
 {
   {
+    uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    b.erase(b.begin(), b.begin() + 4 + type_size);
+  }
+  {
     uint32_t hash_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
     this->hash = std::string(&b[4], &b[4 + hash_size]);
     b.erase(b.begin(), b.begin() + 4 + hash_size);
@@ -163,17 +180,26 @@ std::string AddSeeder::getPort()
 
 std::string AddSeeder::getType()
 {
-  return std::string("AddSeeder");
+  return std::string("ADDSEEDER");
 }
 
 std::vector<char> AddSeeder::getBytes()
 {
   std::vector<char> buf;
-  uint32_t size = this->hash.size();
+  uint32_t size = this->type.size();
   buf = uint32tonv(size);
-  for (auto i : this->hash)
+  for (auto i : this->type)
   {
     buf.push_back(i);
+  }
+
+  {
+    auto tmp = uint32tonv(this->hash.size());
+    buf.insert(buf.end(), tmp.begin(), tmp.end());
+    for (auto i : this->hash)
+    {
+      buf.push_back(i);
+    }
   }
 
   {
@@ -215,6 +241,10 @@ void AddSeeder::setPort(std::string port)
 RemoveSeeder::RemoveSeeder(std::vector<char> b)
 {
   {
+    uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    b.erase(b.begin(), b.begin() + 4 + type_size);
+  }
+  {
     uint32_t hash_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
     this->hash = std::string(&b[4], &b[4 + hash_size]);
     b.erase(b.begin(), b.begin() + 4 + hash_size);
@@ -253,17 +283,26 @@ std::string RemoveSeeder::getPort()
 
 std::string RemoveSeeder::getType()
 {
-  return std::string("RemoveSeeder");
+  return std::string("REMOVESEEDER");
 }
 
 std::vector<char> RemoveSeeder::getBytes()
 {
   std::vector<char> buf;
-  uint32_t size = this->hash.size();
+  uint32_t size = this->type.size();
   buf = uint32tonv(size);
-  for (auto i : this->hash)
+  for (auto i : this->type)
   {
     buf.push_back(i);
+  }
+
+  {
+    auto tmp = uint32tonv(this->hash.size());
+    buf.insert(buf.end(), tmp.begin(), tmp.end());
+    for (auto i : this->hash)
+    {
+      buf.push_back(i);
+    }
   }
 
   {
@@ -305,6 +344,10 @@ void RemoveSeeder::setPort(std::string port)
 SeederInfoRequest::SeederInfoRequest(std::vector<char> b)
 {
   {
+    uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    b.erase(b.begin(), b.begin() + 4 + type_size);
+  }
+  {
     uint32_t hash_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
     this->hash = std::string(&b[4], &b[4 + hash_size]);
     b.erase(b.begin(), b.begin() + 4 + hash_size);
@@ -329,13 +372,19 @@ std::string SeederInfoRequest::getType()
 std::vector<char> SeederInfoRequest::getBytes()
 {
   std::vector<char> buf;
-  uint32_t size = this->hash.size();
+  uint32_t size = this->type.size();
   buf = uint32tonv(size);
-  for (auto i : this->hash)
+  for (auto i : this->type)
   {
     buf.push_back(i);
   }
 
+  auto tmp = uint32tonv(this->hash.size());
+  buf.insert(buf.end(), tmp.begin(), tmp.end());
+  for (auto i : this->hash)
+  {
+    buf.push_back(i);
+  }
   return buf;
 }
 
@@ -350,6 +399,10 @@ void SeederInfoRequest::setHash(std::string hash)
 //Constructors
 SeederInfoResponse::SeederInfoResponse(std::vector<char> b)
 {
+  {
+    uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    b.erase(b.begin(), b.begin() + 4 + type_size);
+  }
   //hash
   uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   this->hash = std::string(&b[4], &b[4 + size]);
@@ -392,14 +445,20 @@ std::vector<char> SeederInfoResponse::getBytes()
   std::vector<char> buf;
 
   //hash
-  uint32_t size = this->hash.size();
+  uint32_t size = this->type.size();
   buf = uint32tonv(size);
+  buf.insert(buf.end(), this->type.begin(), this->type.end());
+
+  //hash
+  size = this->hash.size();
+  auto temp = uint32tonv(size);
+  buf.insert(buf.end(), temp.begin(), temp.end());
   buf.insert(buf.end(), this->hash.begin(), this->hash.end());
 
   //vectors
   size = this->seeder_list.size();
   auto str_size = std::to_string(size);
-  auto temp = uint32tonv(size);
+  temp = uint32tonv(size);
   buf.insert(buf.end(), temp.begin(), temp.end());
   buf.insert(buf.end(), str_size.begin(), str_size.end());
 
@@ -449,6 +508,10 @@ void SeederInfoResponse::addSeeder(Seeder seed)
 //Constructors
 ChunkInfoRequest::ChunkInfoRequest(std::vector<char> b)
 {
+  {
+    uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    b.erase(b.begin(), b.begin() + 4 + type_size);
+  }
   uint32_t hash_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   this->hash = std::string(&b[4], &b[4 + hash_size]);
   b.erase(b.begin(), b.begin() + 4 + hash_size);
@@ -472,13 +535,19 @@ std::string ChunkInfoRequest::getType()
 std::vector<char> ChunkInfoRequest::getBytes()
 {
   std::vector<char> buf;
-  uint32_t size = this->hash.size();
+  uint32_t size = this->type.size();
   buf = uint32tonv(size);
-  for (auto i : this->hash)
+  for (auto i : this->type)
   {
     buf.push_back(i);
   }
 
+  auto tmp = uint32tonv(this->hash.size());
+  for (auto i : tmp)
+  {
+    buf.push_back(i);
+  }
+  buf.insert(buf.end(), this->hash.begin(), this->hash.end());
   return buf;
 }
 
@@ -493,6 +562,10 @@ void ChunkInfoRequest::setHash(std::string hash)
 //Constructors
 ChunkInfoResponse::ChunkInfoResponse(std::vector<char> b)
 {
+  {
+    uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    b.erase(b.begin(), b.begin() + 4 + type_size);
+  }
   //Hash
   uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   this->hash = std::string(&b[4], &b[4 + size]);
@@ -519,14 +592,19 @@ std::vector<char> ChunkInfoResponse::getBytes()
 {
   //buffer
   std::vector<char> buf;
-  uint32_t size = this->hash.size();
+  uint32_t size = this->type.size();
   buf = uint32tonv(size);
+  buf.insert(buf.end(), this->type.begin(), this->type.end());
+  //Hash
+  size = this->hash.size();
+  auto temp = uint32tonv(size);
+  buf.insert(buf.end(), temp.begin(), temp.end());
   buf.insert(buf.end(), this->hash.begin(), this->hash.end());
 
   size = this->chunk_map.size();
-  auto temp = uint32tonv(size);
+  temp = uint32tonv(size);
   buf.insert(buf.end(), temp.begin(), temp.end());
-  buf.insert(buf.end(), chunk_map.begin(), chunk_map.end());
+  buf.insert(buf.end(), this->chunk_map.begin(), this->chunk_map.end());
   return buf;
 }
 
@@ -556,6 +634,10 @@ void ChunkInfoResponse::setHash(std::string hash)
 //Constructor
 SendChunkRequest::SendChunkRequest(std::vector<char> b)
 {
+  {
+    uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    b.erase(b.begin(), b.begin() + 4 + type_size);
+  }
   uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   this->hash = std::string(&b[4], &b[4 + size]);
 
@@ -590,12 +672,18 @@ std::vector<char> SendChunkRequest::getBytes()
 {
   //buffer
   std::vector<char> buf;
-  uint32_t size = this->hash.size();
+  uint32_t size = this->type.size();
   buf = uint32tonv(size);
+  buf.insert(buf.end(), this->type.begin(), this->type.end());
+
+  //Hash
+  size = this->hash.size();
+  auto temp = uint32tonv(size);
+  buf.insert(buf.end(), temp.begin(), temp.end());
   buf.insert(buf.end(), this->hash.begin(), this->hash.end());
 
   size = this->chunk_index.size();
-  auto temp = uint32tonv(size);
+  temp = uint32tonv(size);
   buf.insert(buf.end(), temp.begin(), temp.end());
   buf.insert(buf.end(), this->chunk_index.begin(), this->chunk_index.end());
 
@@ -618,6 +706,10 @@ void SendChunkRequest::setHash(std::string hash)
 //Constructor
 SendChunkResponse::SendChunkResponse(std::vector<char> &b)
 {
+  {
+    uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    b.erase(b.begin(), b.begin() + 4 + type_size);
+  }
   //Hash
   uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   this->hash = std::string(b.begin() + 4, b.begin() + 4 + size);
@@ -664,14 +756,20 @@ std::vector<char> SendChunkResponse::getBytes()
   //buffer
   std::vector<char> buf;
 
-  //hash
-  uint32_t size = this->hash.size();
+  //type
+  uint32_t size = this->type.size();
   buf = uint32tonv(size);
+  buf.insert(buf.end(), this->type.begin(), this->type.end());
+
+  //Hash
+  size = this->hash.size();
+  auto temp = uint32tonv(size);
+  buf.insert(buf.end(), temp.begin(), temp.end());
   buf.insert(buf.end(), this->hash.begin(), this->hash.end());
 
   //chunkIndex
   size = this->chunk_index.size();
-  auto temp = uint32tonv(size);
+  temp = uint32tonv(size);
   buf.insert(buf.end(), temp.begin(), temp.end());
   buf.insert(buf.end(), this->chunk_index.begin(), this->chunk_index.end());
 
@@ -701,6 +799,10 @@ std::string SendChunkResponse::getChunkIndex()
 //------------------------------------------------------------Message: Response(SUCCESS/FAIL)----------------------------------------------------------------------------
 Response::Response(std::vector<char> &b)
 {
+  {
+    uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    b.erase(b.begin(), b.begin() + 4 + type_size);
+  }
   uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   this->response = std::string(&b[4], &b[4 + size]);
 }
@@ -717,9 +819,16 @@ std::string Response::getType()
 std::vector<char> Response::getBytes()
 {
   std::vector<char> buf;
-  uint32_t size = this->response.size();
+  uint32_t size = this->type.size();
   buf = uint32tonv(size);
-  buf.insert(buf.end(), response.begin(), response.end());
+  buf.insert(buf.end(), this->type.begin(), this->type.end());
+
+  //response
+  size = this->response.size();
+  auto temp = uint32tonv(size);
+  buf.insert(buf.end(), temp.begin(), temp.end());
+  buf.insert(buf.end(), this->response.begin(), this->response.end());
+
   return buf;
 }
 

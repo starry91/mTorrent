@@ -22,6 +22,7 @@ public:
 //------------------------------------------------------------Message: Share----------------------------------------------------------------------------
 class Share : public Message
 {
+  std::string type = "SHARE";
   std::string file_name;
   std::string hash;
   std::string ip;
@@ -45,6 +46,7 @@ public:
 //------------------------------------------------------------Message: AddSeeder----------------------------------------------------------------------------
 class AddSeeder : public Message
 {
+  std::string type = "ADDSEEDER";
   std::string hash;
   std::string ip;
   std::string port;
@@ -65,6 +67,7 @@ public:
 //------------------------------------------------------------Message: RemoveSeeder----------------------------------------------------------------------------
 class RemoveSeeder : public Message
 {
+  std::string type = "REMOVESEEDER";
   std::string hash;
   std::string ip;
   std::string port;
@@ -85,6 +88,7 @@ public:
 //------------------------------------------------------------Message: SeederInfoRequest----------------------------------------------------------------------------
 class SeederInfoRequest : public Message
 {
+  std::string type = "SEEDERINFOREQUEST";
   std::string hash;
 
 public:
@@ -99,6 +103,7 @@ public:
 //------------------------------------------------------------Message: SeederInfoResponse----------------------------------------------------------------------------
 class SeederInfoResponse : public Message
 {
+  std::string type = "SEEDERINFORESPONSE";
   std::string hash;
   std::vector<Seeder> seeder_list;
 
@@ -116,6 +121,7 @@ public:
 //------------------------------------------------------------Message: ChunkInfoRequest----------------------------------------------------------------------------
 class ChunkInfoRequest : public Message
 {
+  std::string type = "CHUNKINFOREQUEST";
   std::string hash;
 
 public:
@@ -130,6 +136,7 @@ public:
 //------------------------------------------------------------Message: ChunkInfoResponse----------------------------------------------------------------------------
 class ChunkInfoResponse : public Message
 {
+  std::string type = "CHUNKINFORESPONSE";
   std::string hash;
   std::string chunk_map;
 
@@ -147,6 +154,7 @@ public:
 //------------------------------------------------------------Message: SendChunkRequest----------------------------------------------------------------------------
 class SendChunkRequest : public Message
 {
+  std::string type = "SENDCHUNKREQUEST";
   std::string hash;
   std::string chunk_index;
 
@@ -164,6 +172,7 @@ public:
 //------------------------------------------------------------Message: SendChunkResponse----------------------------------------------------------------------------
 class SendChunkResponse : public Message
 {
+  std::string type = "SENDCHUNKRESPONSE";
   std::string hash;
   std::string chunk_index;
   std::vector<char> chunk_data;
@@ -184,6 +193,7 @@ public:
 //------------------------------------------------------------Message: Response(SUCCESS/FAIL)----------------------------------------------------------------------------
 class Response : public Message
 {
+  std::string type = "RESPONSE";
   std::string response;
 
 public:
