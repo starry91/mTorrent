@@ -1,5 +1,4 @@
 #include "trackerHandler.h"
-#include <json/json.h>
 #include <iostream>
 #include <cstring>
 #include <sys/socket.h>
