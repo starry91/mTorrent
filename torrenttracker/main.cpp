@@ -7,9 +7,9 @@
 #include <sstream>
 #include <syslog.h>
 
-int main(int argc, char *argv[])
+int main2(int argc, char *argv[])
 {
-    syslog(0,"--------------------------------------------------");
+    syslog(0, "--------------------------------------------------");
     if (argc < 5)
     {
         std::cerr << "Not enough arguments" << std::endl;
@@ -34,4 +34,18 @@ int main(int argc, char *argv[])
     TrackerHandler tracker(tracker1, tracker2);
     tracker.readSeederfile(std::string(argv[3]));
     tracker.startListening();
+}
+
+#include "message.h"
+
+int main()
+{
+    Share s1;
+    s1.setHash("xyz");
+    s1.setIp("a.b.c.d");
+    s1.setPort("1234");
+    auto b = s1.getBytes();
+    Share s2(b);
+    std::cout << (s1.getIp() == s2.getIp()) << std::endl;
+    std::cout << (s1.getPort() == s2.getPort()) << std::endl;
 }
