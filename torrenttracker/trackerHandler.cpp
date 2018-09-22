@@ -14,7 +14,8 @@
 #include <mutex>
 #include <condition_variable>
 #include <syslog.h>
-
+#include "networkInterfacer.h"
+#include "decoder.h"
 std::mutex seeder_mtx;             // mutex for critical section
 std::condition_variable seeder_cv; // condition variable for critical section
 
@@ -80,9 +81,13 @@ void TrackerHandler::serviceRequest(int client_fd)
 {
     while (true)
     {
-        Client client(client_fd);
-        std::string request = client.extractPayload();
-        if (request == "add_file")
+        NetworkReader reader;
+        auto byte_data = reader.read(client_fd);
+        Decoder decoder;
+        auto msg = decoder.decode(byte_data);
+        std::string request = msg->getType();
+        
+        if (request == "SHARE")
         {
             std::cout << "hello1" << std::endl;
             add_file(client_fd);

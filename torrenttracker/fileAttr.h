@@ -21,6 +21,7 @@ public:
   void addSeeder(seeder_Sptr);
   void removeSeeder(seeder_Sptr);
   int getSeederCount();
+  std::string getHash();
   std::vector<seeder_Sptr> getSeeds();
   std::string getFileName();
 };

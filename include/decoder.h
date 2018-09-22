@@ -12,5 +12,8 @@
 
 class Decoder {
     public:
-    std::shared_ptr<Message> decode()
-}
+    // std::shared_ptr<Message> decode(std::vector<char>);
+    std::pair<std::string, std::vector<char>> decodeMsgType(std::vector<char> b);
+};
+
+#endif

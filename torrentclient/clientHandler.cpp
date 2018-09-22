@@ -19,7 +19,7 @@
 #define PORT 8080
 #include <syslog.h>
 #include <sys/socket.h>
-
+#include "message.h"
 #define CHUNK_SIZE 524288
 
 ClientHandler::ClientHandler(seeder_Sptr host, seeder_Sptr tracker1, seeder_Sptr tracker2)
@@ -178,6 +178,13 @@ void ClientHandler::addMTorrent(mTorrent_Sptr torr)
 void ClientHandler::shareToTracker(std::string hash)
 {
     auto torr = this->files[hash];
+
+    //Share msg
+    Share share;
+    share.setFileName(torr->getfileName());
+    share.setHash(torr->getfileName());
+    share.setIp(this->host->getIp());
+    share.setIp(this->host->getPort());
 
     //sending request type
     char key[1024] = "add_file";

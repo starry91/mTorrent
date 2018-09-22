@@ -38,6 +38,12 @@ int FileAttr::getSeederCount()
 {
     return this->seeds.size();
 }
+
+std::string FileAttr::getHash()
+{
+    return this->hash;
+}
+
 std::string FileAttr::getFileName()
 {
     return this->file_name;

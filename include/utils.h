@@ -15,4 +15,5 @@ uint32_t nvtouint32(const std::vector<char> &arr);
 
 std::vector<char> uint32tonv(uint32_t val);
 
+std::vector<char> readBytes(int n, int sock_fd);
 #endif
