@@ -15,6 +15,8 @@
 #include "commandHandler.h"
 #include "clientDatabase.h"
 #include "logHandler.h"
+#include "peerHandler.h"
+#include "peerListener.h"
 
 using std::cout;
 using std::endl;
@@ -53,6 +55,9 @@ int main(int argc, char *argv[])
         ClientDatabase::getInstance().setLogPath(std::string(argv[4]));
         LogHandler::getInstance().setLogPath(std::string(argv[4]));
     }
+
+    std::thread t1(&PeerListener::startListening, PeerListener());
+    t1.detach();
 
     while (true)
     {

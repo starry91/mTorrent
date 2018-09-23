@@ -33,7 +33,7 @@ void CommandHandler::handleCommand(std::string command)
             msg.setFileName(mtorr->getfileName());
             msg.setHash(mtorr->getHash());
             msg.setIp(ClientDatabase::getInstance().getHost().getIp());
-            msg.setPort(ClientDatabase::getInstance().getHost().getPort());
+            msg.setPort(ClientDatabase::getInstance().getHost().getPort()+"10");  //10 so that it doesnt match with the listening port
 
             //calling rpc
             try

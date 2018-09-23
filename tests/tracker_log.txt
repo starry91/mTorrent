@@ -60,3 +60,13 @@ Sun Sep 23 16:02:26 2018
 : Recieved share request
 Sun Sep 23 16:03:56 2018
 : Recieved share request
+Sun Sep 23 18:29:06 2018
+: Client started
+Sun Sep 23 18:29:06 2018
+: Updated log path in Database
+Sun Sep 23 18:29:06 2018
+: Updated main tracker in Database
+Sun Sep 23 18:29:06 2018
+: Updated seeder file path in Database
+Sun Sep 23 18:29:06 2018
+: Database: Reading seeder file

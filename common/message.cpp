@@ -592,7 +592,7 @@ std::vector<char> ChunkInfoResponse::getBytes()
 }
 
 //Getters
-std::vector<int> ChunkInfoResponse::getChunkInfo()
+std::vector<u_int32_t> ChunkInfoResponse::getChunkInfo()
 {
   return this->chunk_map;
 }
@@ -608,7 +608,7 @@ std::string ChunkInfoResponse::getStatus()
 }
 
 //Setters
-void ChunkInfoResponse::setChunkInfo(std::vector<int> chunks)
+void ChunkInfoResponse::setChunkInfo(std::vector<u_int32_t> chunks)
 {
   this->chunk_map = chunks;
 }
@@ -641,7 +641,7 @@ SendChunkRequest::SendChunkRequest()
 }
 
 //Getters
-int SendChunkRequest::getChunkId()
+u_int32_t SendChunkRequest::getChunkId()
 {
   return this->chunk_index;
 }
@@ -675,7 +675,7 @@ std::vector<char> SendChunkRequest::getBytes()
 }
 
 //Setters
-void SendChunkRequest::setChunkId(int index)
+void SendChunkRequest::setChunkId(u_int32_t index)
 {
   this->chunk_index = index;
 }
@@ -725,7 +725,7 @@ void SendChunkResponse::setHash(std::string hash)
   this->hash = hash;
 }
 
-void SendChunkResponse::setChunkIndex(int index)
+void SendChunkResponse::setChunkIndex(u_int32_t index)
 {
   this->chunk_index = index;
 }
@@ -762,7 +762,7 @@ std::vector<char> SendChunkResponse::getBytes()
   //chunkIndex
   auto str_index = std::to_string(this->chunk_index);
   size = str_index.size();
-  auto temp = uint32tonv(size);
+  temp = uint32tonv(size);
   buf.insert(buf.end(), temp.begin(), temp.end());
   buf.insert(buf.end(), str_index.begin(), str_index.end());
 
@@ -784,7 +784,7 @@ std::string SendChunkResponse::getHash()
   return this->hash;
 }
 
-int SendChunkResponse::getChunkIndex()
+u_int32_t SendChunkResponse::getChunkIndex()
 {
   return this->chunk_index;
 }

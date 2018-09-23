@@ -5,13 +5,13 @@
 #include "fileHandler.h"
 
 mTorrent::mTorrent(std::string path, std::string name)
-{   
+{
     FileHandler filehandler;
     this->path = path;
     this->hash = filehandler.getFileHash(path);
     this->file_name = name;
     this->file_size = filehandler.fileSize(path);
-    this->bit_chunks = std::vector<int>(ceil((this->file_size * 1.0000) / CHUNK_SIZE),1);
+    this->bit_chunks = std::vector<u_int32_t>(ceil((this->file_size * 1.0000) / CHUNK_SIZE), 1);
 }
 
 std::string mTorrent::getfileName()
@@ -19,7 +19,7 @@ std::string mTorrent::getfileName()
     return this->file_name;
 }
 
-std::vector<int> mTorrent::getBitChunks()
+std::vector<u_int32_t> mTorrent::getBitChunks()
 {
     return this->bit_chunks;
 }
@@ -39,6 +39,7 @@ std::string mTorrent::getPath()
     return this->path;
 }
 
-void mTorrent::updateChunk(int index, int val) {
+void mTorrent::updateChunk(u_int32_t index, u_int32_t val)
+{
     this->bit_chunks[index] = val;
 }

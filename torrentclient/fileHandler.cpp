@@ -93,3 +93,18 @@ long FileHandler::fileSize(std::string path)
     file.close();
     return file_size;
 }
+
+void FileHandler::readFileChunk(int chunk_index, std::string path, std::vector<char> &buffer)
+{
+    std::ifstream file;
+    file.open(path, std::ios::in | std::ios::binary);
+    if (!file.good())
+    {
+        throw ErrorMsg("File does not exists");
+    }
+    file.seekg(CHUNK_SIZE*chunk_index);
+    //cut it off to available bytes
+      // create a buffer
+    file.read(&buffer[0], buffer.size()); // read to buffer
+    file.close();
+}

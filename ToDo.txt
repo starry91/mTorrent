@@ -2,3 +2,4 @@
 2) Use share pointers in the tracker map
 3) Do 2 threads open connection on different port?
 4) Add error handling while setting up sockets(might throw bad argument error)
+5) while sending file, check if it is the last chunk
