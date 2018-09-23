@@ -16,6 +16,8 @@ void CommandHandler::handleCommand(std::string command)
     {
         FileHandler filehandler;
 
+        std::cout << "args[1]: " << args[1] << "args[2]: " << args[2] << endl;
+
         auto mtorr = std::make_shared<mTorrent>(args[1], args[2]);
         filehandler.createMTorrent(mtorr);
 
@@ -32,7 +34,7 @@ void CommandHandler::handleCommand(std::string command)
         //calling rpc
         try
         {
-            TrackerServiceServer trackerCommunicator;
+            TrackerServiceServer trackerCommunicator(ClientDatabase::getInstance().getTracker1(), ClientDatabase::getInstance().getTracker2());
             Response res = trackerCommunicator.shareFile(msg);
             this->printResponse(res);
         }

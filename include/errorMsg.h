@@ -2,15 +2,13 @@
 #define ERROR_H
 
 #include <string>
-#include <iostream>
-
 //Error class to handle errors
 
-class Error
+class ErrorMsg
 {
     std::string msg;
     public:
-    Error(std::string msg);
+    ErrorMsg(std::string msg);
     std::string getErrorMsg();
 };
 #endif

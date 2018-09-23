@@ -38,6 +38,10 @@ int main(int argc, char *argv[])
     auto tracker1 = Seeder(ip_1, port_1);
     auto tracker2 = Seeder(ip_2, port_2);
 
+    std::cout << "hello" << std::endl;
+    std::cout << "ip: " << tracker1.getIp() << " port: " << tracker1.getPort() << std::endl;
+    std::cout << "ip: " << tracker2.getIp() << " port: " << tracker2.getPort() << std::endl;
+
     ClientDatabase::getInstance().sethost(host);
     ClientDatabase::getInstance().setTracker1(tracker1);
     ClientDatabase::getInstance().setTracker2(tracker2);

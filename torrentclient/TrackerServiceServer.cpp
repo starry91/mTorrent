@@ -9,15 +9,15 @@
 #include "clientDatabase.h"
 #include "utils.h"
 
-TrackerServiceServer::TrackerServiceServer()
+TrackerServiceServer::TrackerServiceServer(Seeder tracker1, Seeder tracker2)
 {
     try
     {
-        this->tracker_fd = createTCPClient(ClientDatabase::getInstance().getTracker1());
+        this->tracker_fd = createTCPClient(tracker1);
     }
     catch (std::exception e)
     {
-        this->tracker_fd = createTCPClient(ClientDatabase::getInstance().getTracker2());
+        this->tracker_fd = createTCPClient(tracker2);
     }
 }
 

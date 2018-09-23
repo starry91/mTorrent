@@ -6,7 +6,7 @@
 #include "mtorrent.h"
 #include "seeder.h"
 #include "openssl/sha.h"
-#define CHUNK_SIZE 524288
+
 //generating mtorrent file
 void FileHandler::createMTorrent(mTorrent_Sptr torr)
 {
