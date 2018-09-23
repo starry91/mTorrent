@@ -29,6 +29,7 @@ TrackerServiceServer::TrackerServiceServer(Seeder tracker1, Seeder tracker2)
 }
 
 TrackerServiceServer::~TrackerServiceServer() {
+    cout << "### Closing TrackerServiceServer() with fd: " << this->tracker_fd << endl;
     close(this->tracker_fd);
 }
 
@@ -95,4 +96,34 @@ SeederInfoResponse TrackerServiceServer::getSeederInfo(SeederInfoRequest msg)
     std::cout << "getSeederInfo response msg type after decoding: " << msg_pair.first <<std::endl;
     std::cout << "getSeederInfo response msg size after decoding: " << msg_pair.second.size() <<std::endl;
     return SeederInfoResponse(msg_pair.second);
+}
+
+ChunkInfoResponse TrackerServiceServer::getChunkInfo(ChunkInfoRequest req) {
+    Encoder encoder;
+    auto b = encoder.encode("CHUNKINFOREQUEST", req.getBytes());
+    NetworkWriter writer(this->tracker_fd);
+    writer.writeToNetwork(b);
+
+    NetworkReader reader(this->tracker_fd);
+    auto response_b = reader.readFromNetwork();
+    Decoder decoder;
+    auto msg_pair = decoder.decodeMsgType(response_b);
+    std::cout << "getSeederInfo response msg type after decoding: " << msg_pair.first <<std::endl;
+    std::cout << "getSeederInfo response msg size after decoding: " << msg_pair.second.size() <<std::endl;
+    return ChunkInfoResponse(msg_pair.second);
+}
+
+SendChunkResponse TrackerServiceServer::getChunk(SendChunkRequest req) {
+    Encoder encoder;
+    auto b = encoder.encode("SENDCHUNKREQUEST", req.getBytes());
+    NetworkWriter writer(this->tracker_fd);
+    writer.writeToNetwork(b);
+
+    NetworkReader reader(this->tracker_fd);
+    auto response_b = reader.readFromNetwork();
+    Decoder decoder;
+    auto msg_pair = decoder.decodeMsgType(response_b);
+    std::cout << "getChunk response msg type after decoding: " << msg_pair.first <<std::endl;
+    std::cout << "getChunk response msg size after decoding: " << msg_pair.second.size() <<std::endl;
+    return SendChunkResponse(msg_pair.second);
 }

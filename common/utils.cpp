@@ -52,8 +52,9 @@ std::vector<char> readBytes(int n, int sock_fd)
         cout << "before read: count: " << count << ", n: "<< n << endl;
         int temp_count = read(sock_fd, buf, BUFSIZE > (n - count) ? n - count : BUFSIZE);
         cout << "after read: tmp_count: " << temp_count << endl;
-        if(temp_count == 0) {
-            throw ErrorMsg("connection closed");
+        if(temp_count <= 0) {
+            cout << "readBytes() connection closed, fd: " + std::to_string(sock_fd) << endl;
+            throw ErrorMsg("connection closed, fd: " + std::to_string(sock_fd));
         }
         for (int i = 0; i < temp_count; i++)
         {

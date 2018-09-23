@@ -56,6 +56,7 @@ NetworkWriter::NetworkWriter(int sock_fd)
 
 void NetworkWriter::writeToNetwork(std::vector<char> b)
 {
+    cout << "NetworkWriter::writeToNetwork() writing bytes: " << b.size() << endl;
     std::string magic_start = magicStart;
     write(this->client_fd, magic_start.c_str(), magic_start.length());
     auto payload_size = uint32tonv(b.size());

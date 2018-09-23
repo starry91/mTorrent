@@ -37,7 +37,7 @@ SendChunkResponse PeerMessageHandler::handlesendChunkRequest(std::vector<char> b
     {
         auto &database = ClientDatabase::getInstance();
         auto path = database.getmTorrent(m->getHash())->getPath();
-        std::vector<char> buf(CHUNK_SIZE);
+        std::vector<char> buf;
         FileHandler fHandler;
 
         fHandler.readFileChunk(m->getChunkId(), path, buf);

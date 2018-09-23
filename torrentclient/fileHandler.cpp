@@ -134,7 +134,10 @@ void FileHandler::readFileChunk(int chunk_index, std::string path, std::vector<c
     {
         throw ErrorMsg("File does not exists");
     }
+    auto fsize = this->fileSize(path);
+    auto chunksize = (fsize - (CHUNK_SIZE * chunk_index)) > CHUNK_SIZE ? CHUNK_SIZE : (fsize - (CHUNK_SIZE * chunk_index));
     file.seekg(CHUNK_SIZE * chunk_index);
+    buffer.resize(chunksize);
     //cut it off to available bytes
     // create a buffer
     file.read(&buffer[0], buffer.size()); // read to buffer

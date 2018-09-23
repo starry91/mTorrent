@@ -19,6 +19,8 @@ public:
   Response shareFile(Share msg);
   Response addSeederRequest(AddSeeder msg);
   Response removeSeederRequest(RemoveSeeder msg);
+  ChunkInfoResponse getChunkInfo(ChunkInfoRequest req);
+  SendChunkResponse getChunk(SendChunkRequest req);
   SeederInfoResponse getSeederInfo(SeederInfoRequest msg);
   void connectToTracker();
   virtual ~TrackerServiceServer();
