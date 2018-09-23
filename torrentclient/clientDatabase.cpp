@@ -1,5 +1,7 @@
 #include "clientDatabase.h"
 
+ClientDatabase::ClientDatabase(){};
+
 ClientDatabase &ClientDatabase::getInstance()
 {
     static ClientDatabase res;

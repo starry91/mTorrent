@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "message.h"
 
 class CommandHandler {
     public:

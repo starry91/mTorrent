@@ -7,14 +7,13 @@
 #include <string>
 #include <iostream>
 #include <map>
-#include "fileAttr.h"
 #include "seeder.h"
 #include <mutex>
 #include <condition_variable>
 #include "mtorrent.h"
+
 class ClientDatabase
 {
-  private:
     std::mutex seeder_mtx; // mutex for critical section
     Seeder Tracker1;
     Seeder Tracker2;

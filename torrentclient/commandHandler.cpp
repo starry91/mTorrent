@@ -4,6 +4,7 @@
 #include "TrackerServiceServer.h"
 #include "mtorrent.h"
 #include "clientDatabase.h"
+#include "fileHandler.h"
 
 using std::cout;
 using std::endl;
@@ -13,8 +14,13 @@ void CommandHandler::handleCommand(std::string command)
     std::vector<std::string> args = extractArgs(command);
     if (args[0] == "share")
     {
+        FileHandler filehandler;
+
         auto mtorr = std::make_shared<mTorrent>(args[1], args[2]);
-        createMTorrent(mtorr);
+        filehandler.createMTorrent(mtorr);
+
+        //updating database
+        ClientDatabase::getInstance().addMTorrent(mtorr);
 
         //creating share msg for the rpc call
         Share msg;
