@@ -16,6 +16,7 @@ class TrackerServiceServer
 
 public:
   TrackerServiceServer(Seeder tracker1, Seeder tracker2);
+  TrackerServiceServer(Seeder tracker1);
   Response shareFile(Share msg);
   Response addSeederRequest(AddSeeder msg);
   Response removeSeederRequest(RemoveSeeder msg);

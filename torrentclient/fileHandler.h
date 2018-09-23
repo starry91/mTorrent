@@ -16,6 +16,7 @@ class FileHandler
     std::string getFileHash(std::string file_name);
     long fileSize(std::string path);
     void readFileChunk(int chunk_index, std::string path, std::vector<char>& buf_b);
+    void createEmptyFile(std::string path, int size);
 };
 
 #endif

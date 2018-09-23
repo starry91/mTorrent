@@ -143,3 +143,13 @@ void FileHandler::readFileChunk(int chunk_index, std::string path, std::vector<c
     file.read(&buffer[0], buffer.size()); // read to buffer
     file.close();
 }
+
+void FileHandler::createEmptyFile(std::string path, int size)
+{
+    //create empty file
+    std::fstream outfile;
+    outfile.open(path, std::ios::trunc | std::ios::out | std::ios::binary);
+    char buf[size];
+    outfile.write(buf, size);
+    outfile.close();
+}

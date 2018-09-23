@@ -10,41 +10,12 @@
 #include <map>
 #include <queue>
 #include <fstream>
-
+#include "chunkSaver.h"
+#include <thread>
+#include "download.h"
+#include "downloadManager.h"
 using std::cout;
 using std::endl;
-
-class ChunkSaver
-{
-    std::string filepath;
-    std::vector<Seeder> seederlist;
-    int chunkindex;
-    std::string hash;
-
-  public:
-    ChunkSaver(std::string filepath, std::string hash, std::vector<Seeder> seeds, int chunkindex)
-    {
-        this->filepath = filepath;
-        this->seederlist = seeds;
-        this->chunkindex = chunkindex;
-        this->hash = hash;
-    }
-
-    void downloadChunk()
-    {
-        std::fstream outfile;
-        outfile.open(filepath);
-        outfile.seekg(CHUNK_SIZE * chunkindex, std::ios::beg);
-        TrackerServiceServer seeder(this->seederlist[0], this->seederlist[0]);
-        SendChunkRequest req;
-        req.setHash(hash);
-        req.setChunkId(chunkindex);
-        auto resp = seeder.getChunk(req);
-        cout << "get chunk response for chunk: " << chunkindex << ", hash: " << resp.getHash() << ", size: " << resp.getChunkdata().size() << endl;
-        outfile.write(resp.getChunkdata().data(), resp.getChunkdata().size());
-        outfile.close();
-    }
-};
 
 void CommandHandler::handleCommand(std::string command)
 {
@@ -112,12 +83,12 @@ void CommandHandler::handleCommand(std::string command)
 
                 std::cout << "Seeder list size: " << res.getSeeders().size() << endl;
 
-                std::map<std::string, ChunkInfoResponse> chunk_info_map;
+                //std::map<std::string, ChunkInfoResponse> chunk_info_map;
                 std::vector<std::vector<Seeder>> chunk_source(mtorrPtr->getBitChunks().size());
 
                 for (auto s : res.getSeeders())
                 {
-                    TrackerServiceServer seeder(s, s);
+                    TrackerServiceServer seeder(s);
                     ChunkInfoRequest req;
                     req.setHash(mtorrPtr->getHash());
                     auto resp = seeder.getChunkInfo(req);
@@ -130,27 +101,32 @@ void CommandHandler::handleCommand(std::string command)
                             chunk_source[i].push_back(s);
                         }
                     }
-                    chunk_info_map[s.getIp() + ":" + s.getPort()] = resp;
+                    //chunk_info_map[s.getIp() + ":" + s.getPort()] = resp;
                 }
 
+                //create empty file
                 auto filename = mtorrPtr->getfileName().substr(mtorrPtr->getfileName().find_last_of("/"));
                 auto destfilepath = args[2] + "/" + filename;
-                std::fstream outfile;
-                outfile.open(destfilepath, std::ios::trunc | std::ios::out | std::ios::binary);
-                char buf[mtorrPtr->getFileSize()];
-                outfile.write(buf, mtorrPtr->getFileSize());
-                outfile.close();
+                fhandler.createEmptyFile(destfilepath, mtorrPtr->getFileSize());
 
                 cout << "CommandHandler::handleCommand() File name: " << mtorrPtr->getfileName() << endl;
 
-                std::shared_ptr<ChunkSaver> threads[chunk_source.size()];
+                //std::shared_ptr<ChunkSaver> threads[chunk_source.size()];
 
+                std::vector<std::thread> thread_arr;
                 // download chunks
                 for (int i = 0; i < chunk_source.size(); i++)
                 {
-                    ChunkSaver saver(destfilepath, mtorrPtr->getHash(), chunk_source[i], i);
-                    saver.downloadChunk();
+                    down_Sptr dPtr = std::make_shared<Download>(Download(mtorrPtr->getHash(),filename,destfilepath,chunk_source.size()));
+                    DownloadManager::getInstance().addFile(dPtr);
+                    thread_arr.push_back(std::thread(&ChunkSaver::downloadChunk, ChunkSaver(destfilepath, mtorrPtr->getHash(), chunk_source[i], i)));
                 }
+                for (auto &i : thread_arr)
+                {
+                    if (i.joinable())
+                        i.join();
+                }
+                std::cout << "Download Complete" << endl;
             }
             catch (std::exception e)
             {

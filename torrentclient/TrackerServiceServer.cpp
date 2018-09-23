@@ -9,7 +9,7 @@
 #include "clientDatabase.h"
 #include "utils.h"
 #include "unistd.h"
-
+#include "errorMsg.h"
 using std::cout;
 using std::endl;
 
@@ -27,6 +27,23 @@ TrackerServiceServer::TrackerServiceServer(Seeder tracker1, Seeder tracker2)
     }
     cout << "### Created TrackerServiceServer with fd: " << this->tracker_fd << endl;
 }
+
+TrackerServiceServer::TrackerServiceServer(Seeder tracker1)
+{
+    try
+    {
+        cout << "TrackerServiceServer() tracker1: " << tracker1.getIp() << ", " << tracker1.getPort() << endl;
+        this->tracker_fd = createTCPClient(tracker1);
+    }
+    catch (std::exception e)
+    {
+        throw ErrorMsg("Unable to establish connection");
+    }
+    cout << "### Created TrackerServiceServer with fd: " << this->tracker_fd << endl;
+}
+
+
+
 
 TrackerServiceServer::~TrackerServiceServer() {
     cout << "### Closing TrackerServiceServer() with fd: " << this->tracker_fd << endl;
