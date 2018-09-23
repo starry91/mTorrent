@@ -100,8 +100,8 @@ public:
 class SeederInfoResponse : public Message
 {
   std::string hash;
-  std::vector<Seeder> seeder_list;
   std::string status;
+  std::vector<Seeder> seeder_list;
 
 public:
   SeederInfoResponse(std::vector<char> b);
@@ -134,15 +134,18 @@ public:
 class ChunkInfoResponse : public Message
 {
   std::string hash;
-  std::string chunk_map;
+  std::string status;
+  std::vector<int> chunk_map;
 
 public:
-  std::string getChunkInfo();
+  std::vector<int> getChunkInfo();
   std::string getHash();
+  std::string getStatus();
   ChunkInfoResponse(std::vector<char> chunks);
   ChunkInfoResponse();
-  void setChunkInfo(std::string chunk_map);
+  void setChunkInfo(std::vector<int> chunk_map);
   void setHash(std::string hash);
+  void setStatus(std::string status);
   virtual std::string getType();
   virtual std::vector<char> getBytes();
 };
@@ -151,14 +154,14 @@ public:
 class SendChunkRequest : public Message
 {
   std::string hash;
-  std::string chunk_index;
+  int chunk_index;
 
 public:
-  std::string getChunkId();
+  int getChunkId();
   std::string getHash();
   SendChunkRequest(std::vector<char>);
   SendChunkRequest();
-  void setChunkId(std::string chunk_index);
+  void setChunkId(int chunk_index);
   void setHash(std::string hash);
   virtual std::string getType();
   virtual std::vector<char> getBytes();
@@ -168,18 +171,21 @@ public:
 class SendChunkResponse : public Message
 {
   std::string hash;
-  std::string chunk_index;
+  std::string status;
+  int chunk_index;
   std::vector<char> chunk_data;
 
 public:
   std::vector<char> getChunkdata();
   std::string getHash();
-  std::string getChunkIndex();
+  int getChunkIndex();
+  std::string getStatus();
   SendChunkResponse(std::vector<char> &b);
   SendChunkResponse();
   void setChunkData(std::vector<char> &data);
   void setHash(std::string hash);
-  void setChunkIndex(std::string index);
+  void setChunkIndex(int index);
+  void setStatus(std::string status);
   virtual std::string getType();
   virtual std::vector<char> getBytes();
 };

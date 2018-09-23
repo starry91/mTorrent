@@ -522,9 +522,26 @@ ChunkInfoResponse::ChunkInfoResponse(std::vector<char> b)
 
   b.erase(b.begin(), b.begin() + 4 + size);
 
-  //chunkMap
+  //status
   size = nvtouint32(std::vector<char>(&b[0], &b[4]));
-  this->chunk_map = std::string(&b[4], &b[4 + size]);
+  this->status = std::string(&b[4], &b[4 + size]);
+
+  b.erase(b.begin(), b.begin() + 4 + size);
+
+  //chunk vector
+  size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+  auto vec_size = std::stoi(std::string(&b[4], &b[4 + size]));
+
+  b.erase(b.begin(), b.begin() + 4 + size);
+
+  for (int i = 0; i < vec_size; i++)
+  {
+    uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    auto val = std::stoi(std::string(&b[4], &b[4 + size]));
+    b.erase(b.begin(), b.begin() + 4 + size);
+
+    this->chunk_map.push_back(val);
+  }
 }
 
 ChunkInfoResponse::ChunkInfoResponse()
@@ -546,15 +563,36 @@ std::vector<char> ChunkInfoResponse::getBytes()
   buf = uint32tonv(size);
   buf.insert(buf.end(), this->hash.begin(), this->hash.end());
 
-  size = this->chunk_map.size();
+  //status
+  size = this->status.size();
+  auto status_size = std::to_string(size);
   auto temp = uint32tonv(size);
   buf.insert(buf.end(), temp.begin(), temp.end());
-  buf.insert(buf.end(), chunk_map.begin(), chunk_map.end());
+  buf.insert(buf.end(), status_size.begin(), status_size.end());
+
+  //chunks
+  size = this->chunk_map.size();
+  auto str_size = std::to_string(size);
+  temp = uint32tonv(size);
+  buf.insert(buf.end(), temp.begin(), temp.end());
+  buf.insert(buf.end(), str_size.begin(), str_size.end());
+
+  for (auto val : this->chunk_map)
+  {
+    auto tmp = uint32tonv(std::to_string(val).size());
+    for (auto i : tmp)
+    {
+      buf.push_back(i);
+    }
+    auto str_val = std::to_string(val);
+    buf.insert(buf.end(), str_val.begin(), str_val.end());
+  }
+
   return buf;
 }
 
 //Getters
-std::string ChunkInfoResponse::getChunkInfo()
+std::vector<int> ChunkInfoResponse::getChunkInfo()
 {
   return this->chunk_map;
 }
@@ -564,14 +602,24 @@ std::string ChunkInfoResponse::getHash()
   return this->hash;
 }
 
+std::string ChunkInfoResponse::getStatus()
+{
+  return this->status;
+}
+
 //Setters
-void ChunkInfoResponse::setChunkInfo(std::string chunks)
+void ChunkInfoResponse::setChunkInfo(std::vector<int> chunks)
 {
   this->chunk_map = chunks;
 }
 void ChunkInfoResponse::setHash(std::string hash)
 {
   this->hash = hash;
+}
+
+void ChunkInfoResponse::setStatus(std::string status)
+{
+  this->status = status;
 }
 
 //------------------------------------------------------------Message: SendChunkRequest----------------------------------------------------------------------------
@@ -585,7 +633,7 @@ SendChunkRequest::SendChunkRequest(std::vector<char> b)
   b.erase(b.begin(), b.begin() + 4 + size);
 
   size = nvtouint32(std::vector<char>(&b[0], &b[4]));
-  this->chunk_index = std::string(&b[4], &b[4 + size]);
+  this->chunk_index = std::stoi(std::string(&b[4], &b[4 + size]));
 }
 
 SendChunkRequest::SendChunkRequest()
@@ -593,7 +641,7 @@ SendChunkRequest::SendChunkRequest()
 }
 
 //Getters
-std::string SendChunkRequest::getChunkId()
+int SendChunkRequest::getChunkId()
 {
   return this->chunk_index;
 }
@@ -617,16 +665,17 @@ std::vector<char> SendChunkRequest::getBytes()
   buf = uint32tonv(size);
   buf.insert(buf.end(), this->hash.begin(), this->hash.end());
 
-  size = this->chunk_index.size();
+  auto str_chunk = std::to_string(this->chunk_index);
+  size = str_chunk.size();
   auto temp = uint32tonv(size);
   buf.insert(buf.end(), temp.begin(), temp.end());
-  buf.insert(buf.end(), this->chunk_index.begin(), this->chunk_index.end());
+  buf.insert(buf.end(), str_chunk.begin(), str_chunk.end());
 
   return buf;
 }
 
 //Setters
-void SendChunkRequest::setChunkId(std::string index)
+void SendChunkRequest::setChunkId(int index)
 {
   this->chunk_index = index;
 }
@@ -646,9 +695,14 @@ SendChunkResponse::SendChunkResponse(std::vector<char> &b)
   this->hash = std::string(b.begin() + 4, b.begin() + 4 + size);
   b.erase(b.begin(), b.begin() + 4 + size);
 
+  //status
+  size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+  this->status = std::string(&b[4], &b[4 + size]);
+  b.erase(b.begin(), b.begin() + 4 + size);
+
   //Chunk Index
   size = nvtouint32(std::vector<char>(&b[0], &b[4]));
-  this->chunk_index = std::string(b.begin() + 4, b.begin() + 4 + size);
+  this->chunk_index = std::stoi(std::string(b.begin() + 4, b.begin() + 4 + size));
   b.erase(b.begin(), b.begin() + 4 + size);
 
   //Data
@@ -671,9 +725,14 @@ void SendChunkResponse::setHash(std::string hash)
   this->hash = hash;
 }
 
-void SendChunkResponse::setChunkIndex(std::string index)
+void SendChunkResponse::setChunkIndex(int index)
 {
   this->chunk_index = index;
+}
+
+void SendChunkResponse::setStatus(std::string status)
+{
+  this->status = status;
 }
 
 //Getters
@@ -692,11 +751,20 @@ std::vector<char> SendChunkResponse::getBytes()
   buf = uint32tonv(size);
   buf.insert(buf.end(), this->hash.begin(), this->hash.end());
 
-  //chunkIndex
-  size = this->chunk_index.size();
+
+  //status
+  size = this->status.size();
+  auto status_size = std::to_string(size);
   auto temp = uint32tonv(size);
   buf.insert(buf.end(), temp.begin(), temp.end());
-  buf.insert(buf.end(), this->chunk_index.begin(), this->chunk_index.end());
+  buf.insert(buf.end(), status_size.begin(), status_size.end());
+
+  //chunkIndex
+  auto str_index = std::to_string(this->chunk_index);
+  size = str_index.size();
+  auto temp = uint32tonv(size);
+  buf.insert(buf.end(), temp.begin(), temp.end());
+  buf.insert(buf.end(), str_index.begin(), str_index.end());
 
   //chunk data
   size = this->chunk_data.size();
@@ -716,9 +784,14 @@ std::string SendChunkResponse::getHash()
   return this->hash;
 }
 
-std::string SendChunkResponse::getChunkIndex()
+int SendChunkResponse::getChunkIndex()
 {
   return this->chunk_index;
+}
+
+std::string SendChunkResponse::getStatus()
+{
+  return this->status;
 }
 
 //------------------------------------------------------------Message: Response(SUCCESS/FAIL)----------------------------------------------------------------------------

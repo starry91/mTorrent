@@ -1,3 +1,4 @@
 1) Make a connection when client starts so that you dont need to send the ip and port for each share reqest
 2) Use share pointers in the tracker map
 3) Do 2 threads open connection on different port?
+4) Add error handling while setting up sockets(might throw bad argument error)
