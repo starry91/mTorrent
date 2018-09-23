@@ -3,6 +3,7 @@
 #include <condition_variable>
 #include <syslog.h>
 #include <fstream>
+#include "logHandler.h"
 
 TrackerDatabase::TrackerDatabase()
 {
@@ -17,21 +18,25 @@ TrackerDatabase &TrackerDatabase::getInstance()
 void TrackerDatabase::setMainTracker(Seeder tracker)
 {
     this->tracker1 = tracker;
+    LogHandler::getInstance().logMsg("Updated main tracker in Database");
 }
 
 void TrackerDatabase::setSecondaryTracker(Seeder tracker)
 {
     this->tracker2 = tracker;
+    LogHandler::getInstance().logMsg("Updated secondary tracker in Database");
 }
 
 void TrackerDatabase::setLogPath(std::string path)
 {
     this->log_path = path;
+    LogHandler::getInstance().logMsg("Updated log path in Database");
 }
 
 void TrackerDatabase::setSeederFilePath(std::string path)
 {
     this->seeder_file_path = path;
+    LogHandler::getInstance().logMsg("Updated seeder file path in Database");
 }
 
 void TrackerDatabase::addFileEntry(std::shared_ptr<FileAttr> file)
@@ -46,6 +51,7 @@ void TrackerDatabase::addFileEntry(std::shared_ptr<FileAttr> file)
     else
     {
         this->files[hash] = file;
+        LogHandler::getInstance().logMsg("Database: Added new file entry");
     }
 }
 
@@ -59,6 +65,7 @@ void TrackerDatabase::addSeeder(std::string hash, seeder_Sptr seeder)
     else
     {
         std::cout << "fail2" << std::endl;
+        LogHandler::getInstance().logError("Database: No hash found for add seeder request for: " + hash);
         throw std::string("No hash found");
     }
 }
@@ -77,11 +84,13 @@ void TrackerDatabase::remove_seeder(std::string hash, seeder_Sptr seeder)
             if (file->getSeederCount() == 0)
             {
                 syslog(0, "Removing hash");
+                LogHandler::getInstance().logMsg("Database: Removed seeder entry");
                 this->files.erase(hash);
             }
         }
         else
         {
+            LogHandler::getInstance().logError("Database: No hash found for add seeder request for: " + hash);
             throw std::string("No hash found");
         }
     }
@@ -92,9 +101,11 @@ std::vector<seeder_Sptr> TrackerDatabase::getSeederList(std::string hash)
     if (this->files.find(hash) != this->files.end())
     {
         return this->files[hash]->getSeeds();
+        LogHandler::getInstance().logMsg("Database: fetching seeder list for hash: " + hash);
     }
     else
     {
+        LogHandler::getInstance().logError("Database: No hash found for get seeder request for: " + hash);
         throw std::string("Error");
     }
 }
@@ -106,6 +117,7 @@ Seeder TrackerDatabase::getMainTracker()
 
 void TrackerDatabase::readSeederfile()
 {
+    LogHandler::getInstance().logMsg("Database: Reading seeder file");
     std::string file = this->seeder_file_path;
     std::string line;
     std::ifstream input(file);

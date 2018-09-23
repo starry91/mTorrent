@@ -6,11 +6,18 @@
 #include "mtorrent.h"
 #include "seeder.h"
 #include "openssl/sha.h"
+#include "errorMsg.h"
 
 //generating mtorrent file
 void FileHandler::createMTorrent(mTorrent_Sptr torr)
 {
-    std::ofstream myfile(torr->getfileName().c_str());
+    std::ofstream myfile;
+    myfile.open(torr->getfileName().c_str());
+    myfile.exceptions(std::ios::badbit);
+    if (myfile.bad())
+    {
+        throw ErrorMsg("Invalid torrent path");
+    }
     if (myfile.is_open())
     {
         syslog(0, "Writing file to: [%s]", torr->getPath().c_str());
@@ -30,6 +37,11 @@ std::string FileHandler::getFileHash(std::string file_name)
 {
     std::ifstream file;
     file.open(file_name, std::ios::in | std::ios::binary);
+    //myfile.exceptions(std::ios::badbit);
+    if (!file.good())
+    {
+        throw ErrorMsg("File does not exists");
+    }
     file.ignore(std::numeric_limits<std::streamsize>::max());
     std::streamsize file_size = file.gcount();
     std::string hash = "";
@@ -72,6 +84,10 @@ long FileHandler::fileSize(std::string path)
 {
     std::ifstream file;
     file.open(path, std::ios::in | std::ios::binary);
+    if (!file.good())
+    {
+        throw ErrorMsg("File does not exists");
+    }
     file.ignore(std::numeric_limits<std::streamsize>::max());
     std::streamsize file_size = file.gcount();
     file.close();

@@ -1,0 +1,5 @@
+Tracker commands:
+./torrenttracker/ttracker 127.0.0.1:9090 127.0.0.1:8787 ./tests/seed_list.txt ./tests/tracker_log.txt
+
+Client commands:
+./torrentclient/tclient 127.0.0.1:9559 127.0.0.1:9090 127.0.0.1:8787 ./tests/client_log.txt

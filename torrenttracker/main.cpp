@@ -11,12 +11,14 @@
 #include <arpa/inet.h>
 #include "trackerDatabase.h"
 #include "rpcHandler.h"
+#include "logHandler.h"
 
 int main(int argc, char *argv[])
 {
     syslog(0, "--------------------------------------------------");
     if (argc < 5)
     {
+        LogHandler::getInstance().logError("Not enough arguments");
         std::cerr << "Not enough arguments" << std::endl;
         exit(2);
     }
@@ -28,7 +30,8 @@ int main(int argc, char *argv[])
     //std::cout << "ip: " << tracker2.getIp() << " port: " << tracker2.getPort() << std::endl;
     Seeder tracker1(ip_1, port_1);
     Seeder tracker2(ip_2, port_2);
-
+    LogHandler::getInstance().setLogPath(std::string(argv[4]));
+    LogHandler::getInstance().logMsg("Client started");
     //throws logic error
     // Seeder tracker1(std::string(strtok(argv[1], ":")), std::string(strtok(NULL, ":")));
     // Seeder tracker2(std::string(strtok(argv[2], ":")), std::string(strtok(NULL, ":")));
@@ -37,9 +40,10 @@ int main(int argc, char *argv[])
     std::cout << "ip: " << tracker1.getIp() << " port: " << tracker1.getPort() << std::endl;
     std::cout << "ip: " << tracker2.getIp() << " port: " << tracker2.getPort() << std::endl;
 
+    TrackerDatabase::getInstance().setLogPath(std::string(argv[4]));
     TrackerDatabase::getInstance().setMainTracker(tracker1);
     TrackerDatabase::getInstance().setSeederFilePath(std::string(argv[3]));
-    TrackerDatabase::getInstance().setLogPath(std::string(argv[4]));
+    TrackerDatabase::getInstance().readSeederfile();
 
     int server_fd, opt = 1;
     struct sockaddr_in server_addr, client_addr;

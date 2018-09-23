@@ -15,6 +15,8 @@
 #include "TrackerServiceServer.h"
 #include "commandHandler.h"
 #include "clientDatabase.h"
+#include "logHandler.h"
+
 using std::cout;
 using std::endl;
 
@@ -46,9 +48,11 @@ int main(int argc, char *argv[])
     ClientDatabase::getInstance().setTracker1(tracker1);
     ClientDatabase::getInstance().setTracker2(tracker2);
 
-    if (argc == 4)
+    if (argc == 5)
     {
+        cout << "got log path" << endl;
         ClientDatabase::getInstance().setLogPath(std::string(argv[4]));
+        LogHandler::getInstance().setLogPath(std::string(argv[4]));
     }
 
     while (true)

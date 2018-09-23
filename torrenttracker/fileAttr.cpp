@@ -1,5 +1,7 @@
 #include "fileAttr.h"
 #include <syslog.h>
+#include "logHandler.h"
+
 FileAttr::FileAttr(std::string file_name, std::string hash, std::shared_ptr<Seeder> seed)
 {
     this->file_name = file_name;
@@ -16,7 +18,20 @@ FileAttr::FileAttr(std::string file_name, std::string hash, std::vector<seeder_S
 
 void FileAttr::addSeeder(seeder_Sptr seeder)
 {
-    this->seeds.push_back(seeder);
+    bool found = false;
+    for (auto i : this->seeds)
+    {
+        if (i->getIp() == seeder->getIp() && i->getPort() == seeder->getPort())
+        {
+            found = true;
+            break;
+        }
+    }
+    if (found == false)
+    {
+        this->seeds.push_back(seeder);
+        LogHandler::getInstance().logMsg("Database: Added new seeder entry");
+    }
 }
 
 void FileAttr::removeSeeder(seeder_Sptr seeder)
