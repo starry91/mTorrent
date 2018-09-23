@@ -1,4 +1,4 @@
-CLIENT_OBJS = main.o trackerHandler.o fileAttr.o
+CLIENT_OBJS = main.o fileAttr.o rpcHandler.o trackerDatabase.o trackerMessageHandler.o
 LDFLAGS +=  -lpthread -lcrypto -lssl
 CFLAGS += -g -I$(PROJECT_ROOT)/include
 

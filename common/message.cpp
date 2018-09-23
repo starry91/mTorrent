@@ -356,6 +356,12 @@ SeederInfoResponse::SeederInfoResponse(std::vector<char> b)
 
   b.erase(b.begin(), b.begin() + 4 + size);
 
+  //status
+  size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+  this->status = std::string(&b[4], &b[4 + size]);
+
+  b.erase(b.begin(), b.begin() + 4 + size);
+
   //seeder vector
   size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   auto vec_size = std::stoi(std::string(&b[4], &b[4 + size]));
@@ -396,10 +402,17 @@ std::vector<char> SeederInfoResponse::getBytes()
   buf = uint32tonv(size);
   buf.insert(buf.end(), this->hash.begin(), this->hash.end());
 
+  //status
+  size = this->status.size();
+  auto status_size = std::to_string(size);
+  auto temp = uint32tonv(size);
+  buf.insert(buf.end(), temp.begin(), temp.end());
+  buf.insert(buf.end(), status_size.begin(), status_size.end());
+
   //vectors
   size = this->seeder_list.size();
   auto str_size = std::to_string(size);
-  auto temp = uint32tonv(size);
+  temp = uint32tonv(size);
   buf.insert(buf.end(), temp.begin(), temp.end());
   buf.insert(buf.end(), str_size.begin(), str_size.end());
 
@@ -433,6 +446,11 @@ std::string SeederInfoResponse::getHash()
   return this->hash;
 }
 
+std::string SeederInfoResponse::getStatus()
+{
+  return this->status;
+}
+
 //Setters
 void SeederInfoResponse::setHash(std::string hash)
 {
@@ -442,6 +460,11 @@ void SeederInfoResponse::setHash(std::string hash)
 void SeederInfoResponse::addSeeder(Seeder seed)
 {
   this->seeder_list.push_back(seed);
+}
+
+void SeederInfoResponse::setStatus(std::string status)
+{
+  this->status = status;
 }
 
 //------------------------------------------------------------Message: ChunkInfoRequest----------------------------------------------------------------------------

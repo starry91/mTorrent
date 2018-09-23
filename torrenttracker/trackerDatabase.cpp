@@ -41,7 +41,7 @@ void TrackerDatabase::addFileEntry(std::shared_ptr<FileAttr> file)
     if (this->files.find(hash) != this->files.end())
     {
         //when only 1 seeder is there while sharing
-        this->files[hash]->addSeeder(file->getSeeds[0]);
+        this->files[hash]->addSeeder(file->getSeeds()[0]);
     }
     else
     {
@@ -55,6 +55,11 @@ void TrackerDatabase::addSeeder(std::string hash, seeder_Sptr seeder)
     if (this->files.find(hash) != this->files.end())
     {
         this->files[hash]->addSeeder(seeder);
+    }
+    else
+    {
+        std::cout << "fail2" << std::endl;
+        throw std::string("No hash found");
     }
 }
 
@@ -75,12 +80,23 @@ void TrackerDatabase::remove_seeder(std::string hash, seeder_Sptr seeder)
                 this->files.erase(hash);
             }
         }
+        else
+        {
+            throw std::string("No hash found");
+        }
     }
 }
 
 std::vector<seeder_Sptr> TrackerDatabase::getSeederList(std::string hash)
 {
-    return this->files[hash]->getSeeds();
+    if (this->files.find(hash) != this->files.end())
+    {
+        return this->files[hash]->getSeeds();
+    }
+    else
+    {
+        throw std::string("Error");
+    }
 }
 
 Seeder TrackerDatabase::getMainTracker()
@@ -137,12 +153,4 @@ void TrackerDatabase::readSeederfile()
             syslog(0, "read port: %s", (*it1)->getPort().c_str());
         }
     }
-}
-
-bool TrackerDatabase::exists(std::string hash)
-{
-    if (this->files.find(hash) == this->files.end())
-        return false;
-    else
-        return true;
 }

@@ -101,14 +101,17 @@ class SeederInfoResponse : public Message
 {
   std::string hash;
   std::vector<Seeder> seeder_list;
+  std::string status;
 
 public:
   SeederInfoResponse(std::vector<char> b);
   SeederInfoResponse();
   void addSeeder(Seeder seeder);
   void setHash(std::string hash);
+  void setStatus(std::string status);
   std::vector<Seeder> getSeeders();
   std::string getHash();
+  std::string getStatus();
   virtual std::string getType();
   virtual std::vector<char> getBytes();
 };

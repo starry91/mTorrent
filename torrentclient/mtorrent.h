@@ -12,16 +12,17 @@ class mTorrent
     std::string path;
     std::string hash;
     std::string file_name;
-    int file_size;
-    std::string bit_chunks;
+    long file_size;
+    std::vector<int> bit_chunks;
 
   public:
-    mTorrent(std::string path, std::string hash, std::string name, int file_size, std::string bit_chunks);
+    mTorrent(std::string path, std::string name);
     std::string getPath();
     std::string getHash();
     std::string getfileName();
     int getFileSize();
-    std::string getBitChunks();
+    std::vector<int> getBitChunks();
+    void updateChunk(int index, int val);
 };
 
 typedef std::shared_ptr<mTorrent> mTorrent_Sptr;

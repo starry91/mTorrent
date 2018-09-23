@@ -12,7 +12,7 @@
 #include "trackerDatabase.h"
 #include "rpcHandler.h"
 
-int main2(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     syslog(0, "--------------------------------------------------");
     if (argc < 5)
@@ -36,6 +36,10 @@ int main2(int argc, char *argv[])
     std::cout << "hello" << std::endl;
     std::cout << "ip: " << tracker1.getIp() << " port: " << tracker1.getPort() << std::endl;
     std::cout << "ip: " << tracker2.getIp() << " port: " << tracker2.getPort() << std::endl;
+
+    TrackerDatabase::getInstance().setMainTracker(tracker1);
+    TrackerDatabase::getInstance().setSeederFilePath(std::string(argv[3]));
+    TrackerDatabase::getInstance().setLogPath(std::string(argv[4]));
 
     int server_fd, opt = 1;
     struct sockaddr_in server_addr, client_addr;
@@ -89,7 +93,7 @@ int main2(int argc, char *argv[])
 
 #include "message.h"
 
-int main()
+int main2()
 {
     //Share
     std::cout << "Share---------------" << std::endl;

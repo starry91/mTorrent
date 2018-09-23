@@ -1,4 +1,4 @@
-COMMON_OBJS := chunk.o client.o seeder.o message.o utils.o
+COMMON_OBJS := chunk.o client.o seeder.o message.o utils.o encoder.o decoder.o NetworkInterfacer.o
 CFLAGS += -g -I$(PROJECT_ROOT)/include
 
 all: $(COMMON_OBJS)

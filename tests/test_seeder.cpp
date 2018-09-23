@@ -10,10 +10,13 @@
 #include "client.h"
 #define PORT 8080
 #include <syslog.h>
+#include "message.h"
+#include "networkInterfacer.h"
+#include "TrackerServiceServer.h"
 
 int main(int argc, char const *argv[])
 {
-    syslog(0,"--------------------------------------------------");
+    syslog(0, "--------------------------------------------------");
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
@@ -41,48 +44,35 @@ int main(int argc, char const *argv[])
         printf("\nConnection Failed \n");
         return -1;
     }
-    std::cout << "Hello3" << std::endl;
-    char key[1024] = "get_seeds";
-    printf(" file len: %d", strlen(key));
-    long key_count = htonl(strlen(key));
-    printf(" file len: %d", key_count);
-    send(sock, &key_count, sizeof(key_count), 0);
-    send(sock, key, strlen(key), 0);
-    std::cout << "Hello4" << std::endl;
-    // char buff[1024] = "sample.txt";
-    // long byte_count = htonl(strlen(buff));
-    // printf(" file len: %d", byte_count);
-    // send(sock, &byte_count, sizeof(byte_count), 0);
-    // send(sock, buff, strlen(buff), 0);
 
-    char hash[] = "35ds43342##433";
-    long hash_count = htonl(strlen(hash));
-    printf(" hash len: %d", strlen(hash));
-    send(sock, &hash_count, sizeof(hash_count), 0);
-    send(sock, hash, strlen(hash), 0);
-    std::cout << "Hello5" << std::endl;
+    Share msg1;
+    msg1.setFileName("foo.txt");
+    msg1.setHash("xyz");
+    msg1.setIp("192.168.21.22");
+    msg1.setPort("9090");
 
-    // char ip[1024] = "191.144.34.23";
-    // long ip_count = htonl(strlen(ip));
-    // printf(" file len: %d", ip_count);
-    // send(sock, &ip_count, sizeof(ip_count), 0);
-    // send(sock, ip, strlen(ip), 0);
+    TrackerServiceServer t1(sock);
+    t1.shareFile(msg1);
 
-    // char port[] = "9897";
-    // long port_count = htonl(strlen(port));
-    // printf(" hash len: %d", port_count);
-    // send(sock, &port_count, sizeof(port_count), 0);
-    // send(sock, port, strlen(hash), 0);
-    Client c(sock);
-    std::string temp = c.extractPayload();
-    std::cout << "temp: " << temp << std::endl;
-    int size = stoi(temp);
-    std::cout << "msg: " << size << std::endl;
-    for (int i = 0; i < size; i++)
-    {
-        printf("ip: %s", c.extractPayload().c_str());
-        printf("port: %s", c.extractPayload().c_str());
-    }
+    AddSeeder msg2;
+    msg2.setHash("xyz");
+    msg2.setIp("192.168.21.22");
+    msg2.setPort("9090");
+
+    t1.addSeederRequest(msg2);
+
+    RemoveSeeder msg3;
+    msg3.setHash("xyz");
+    msg3.setIp("192.168.21.22");
+    msg3.setPort("9090");
+
+    t1.removeSeederRequest(msg3);
+
+    SeederInfoRequest msg4;
+    msg4.setHash("xyz");
+
+    std::vector<Seeder> seeder_list = t1.getSeederInfo(msg4);
+
     printf("%s\n", buffer);
     return 0;
 }

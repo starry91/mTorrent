@@ -1,6 +1,6 @@
 
 
-CLIENT_OBJS = client_main.o clientHandler.o mtorrent.o
+CLIENT_OBJS = client_main.o clientHandler.o mtorrent.o TrackerServiceServer.o
 LDFLAGS +=  -lpthread -lcrypto -lssl
 CFLAGS += -g -I$(PROJECT_ROOT)/include
 

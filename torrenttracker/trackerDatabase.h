@@ -16,7 +16,6 @@ class TrackerDatabase
 {
 private:
   std::mutex seeder_mtx;             // mutex for critical section
-  std::condition_variable seeder_cv; // condition variable for critical section
   Seeder tracker1;
   Seeder tracker2;
   std::string log_path;
