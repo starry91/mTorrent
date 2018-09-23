@@ -14,6 +14,38 @@
 using std::cout;
 using std::endl;
 
+class ChunkSaver
+{
+    std::string filepath;
+    std::vector<Seeder> seederlist;
+    int chunkindex;
+    std::string hash;
+
+  public:
+    ChunkSaver(std::string filepath, std::string hash, std::vector<Seeder> seeds, int chunkindex)
+    {
+        this->filepath = filepath;
+        this->seederlist = seeds;
+        this->chunkindex = chunkindex;
+        this->hash = hash;
+    }
+
+    void downloadChunk()
+    {
+        std::fstream outfile;
+        outfile.open(filepath);
+        outfile.seekg(CHUNK_SIZE * chunkindex, std::ios::beg);
+        TrackerServiceServer seeder(this->seederlist[0], this->seederlist[0]);
+        SendChunkRequest req;
+        req.setHash(hash);
+        req.setChunkId(chunkindex);
+        auto resp = seeder.getChunk(req);
+        cout << "get chunk response for chunk: " << chunkindex << ", hash: " << resp.getHash() << ", size: " << resp.getChunkdata().size() << endl;
+        outfile.write(resp.getChunkdata().data(), resp.getChunkdata().size());
+        outfile.close();
+    }
+};
+
 void CommandHandler::handleCommand(std::string command)
 {
     cout << "in CommandHandler::handleCommand(), command: [" << command << "]" << endl;
@@ -66,8 +98,8 @@ void CommandHandler::handleCommand(std::string command)
 
             std::cout << "CommandHandler::handleCommand() read Mtorr" << std::endl;
 
-            std::cout << "CommandHandler::handleCommand() Mtorr hash: " <<  mtorrPtr->getHash() << std::endl;
-            std::cout << "CommandHandler::handleCommand() Mtorr file size: " <<  mtorrPtr->getFileSize() << std::endl;
+            std::cout << "CommandHandler::handleCommand() Mtorr hash: " << mtorrPtr->getHash() << std::endl;
+            std::cout << "CommandHandler::handleCommand() Mtorr file size: " << mtorrPtr->getFileSize() << std::endl;
 
             SeederInfoRequest req;
             req.setHash(mtorrPtr->getHash());
@@ -83,42 +115,42 @@ void CommandHandler::handleCommand(std::string command)
                 std::map<std::string, ChunkInfoResponse> chunk_info_map;
                 std::vector<std::vector<Seeder>> chunk_source(mtorrPtr->getBitChunks().size());
 
-                for (auto s : res.getSeeders()) {
+                for (auto s : res.getSeeders())
+                {
                     TrackerServiceServer seeder(s, s);
                     ChunkInfoRequest req;
                     req.setHash(mtorrPtr->getHash());
                     auto resp = seeder.getChunkInfo(req);
                     cout << "Chunk info response: " << resp.getHash() << endl;
-                    for (int i=0; i<resp.getChunkInfo().size();i++) {
+                    for (int i = 0; i < resp.getChunkInfo().size(); i++)
+                    {
                         cout << "Chunk " << i << ", value: " << resp.getChunkInfo()[i] << endl;
-                        if(resp.getChunkInfo()[i] == 1) {
+                        if (resp.getChunkInfo()[i] == 1)
+                        {
                             chunk_source[i].push_back(s);
                         }
                     }
-                    chunk_info_map[s.getIp() + ":" +s.getPort()] = resp;
+                    chunk_info_map[s.getIp() + ":" + s.getPort()] = resp;
                 }
 
                 auto filename = mtorrPtr->getfileName().substr(mtorrPtr->getfileName().find_last_of("/"));
                 auto destfilepath = args[2] + "/" + filename;
                 std::fstream outfile;
-                outfile.open(destfilepath, std::ios::app | std::ios::binary);
-
+                outfile.open(destfilepath, std::ios::trunc | std::ios::out | std::ios::binary);
+                char buf[mtorrPtr->getFileSize()];
+                outfile.write(buf, mtorrPtr->getFileSize());
+                outfile.close();
 
                 cout << "CommandHandler::handleCommand() File name: " << mtorrPtr->getfileName() << endl;
 
+                std::shared_ptr<ChunkSaver> threads[chunk_source.size()];
+
                 // download chunks
-                for(int i=0; i<chunk_source.size();i++) {
-                    TrackerServiceServer seeder(chunk_source[i][0], chunk_source[i][0]);
-                    SendChunkRequest req;
-                    req.setHash(mtorrPtr->getHash());
-                    req.setChunkId(i);
-                    auto resp = seeder.getChunk(req);
-                    cout << "get chunk response for chunk: " << i << ", hash: " << resp.getHash() << ", size: " << resp.getChunkdata().size() << endl;
-                    outfile.write(resp.getChunkdata().data(), resp.getChunkdata().size());
+                for (int i = 0; i < chunk_source.size(); i++)
+                {
+                    ChunkSaver saver(destfilepath, mtorrPtr->getHash(), chunk_source[i], i);
+                    saver.downloadChunk();
                 }
-
-                outfile.close();
-
             }
             catch (std::exception e)
             {
