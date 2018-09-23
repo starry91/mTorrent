@@ -2,7 +2,6 @@
 #include <vector>
 #include <string.h>
 #include "seeder.h"
-#include "clientHandler.h"
 #include <thread>
 #include <sstream>
 #include <syslog.h>

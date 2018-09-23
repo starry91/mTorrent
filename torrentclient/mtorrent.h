@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 #include <map>
-#include "chunk.h"
 #include <vector>
+#include <memory>
 
 class mTorrent
 {
