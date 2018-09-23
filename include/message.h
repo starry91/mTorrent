@@ -135,15 +135,15 @@ class ChunkInfoResponse : public Message
 {
   std::string hash;
   std::string status;
-  std::vector<int> chunk_map;
+  std::vector<u_int32_t> chunk_map;
 
 public:
-  std::vector<int> getChunkInfo();
+  std::vector<u_int32_t> getChunkInfo();
   std::string getHash();
   std::string getStatus();
   ChunkInfoResponse(std::vector<char> chunks);
   ChunkInfoResponse();
-  void setChunkInfo(std::vector<int> chunk_map);
+  void setChunkInfo(std::vector<u_int32_t> chunk_map);
   void setHash(std::string hash);
   void setStatus(std::string status);
   virtual std::string getType();
@@ -154,14 +154,14 @@ public:
 class SendChunkRequest : public Message
 {
   std::string hash;
-  int chunk_index;
+  u_int32_t chunk_index;
 
 public:
-  int getChunkId();
+  u_int32_t getChunkId();
   std::string getHash();
   SendChunkRequest(std::vector<char>);
   SendChunkRequest();
-  void setChunkId(int chunk_index);
+  void setChunkId(u_int32_t chunk_index);
   void setHash(std::string hash);
   virtual std::string getType();
   virtual std::vector<char> getBytes();
@@ -172,19 +172,19 @@ class SendChunkResponse : public Message
 {
   std::string hash;
   std::string status;
-  int chunk_index;
+  u_int32_t chunk_index;
   std::vector<char> chunk_data;
 
 public:
   std::vector<char> getChunkdata();
   std::string getHash();
-  int getChunkIndex();
+  u_int32_t getChunkIndex();
   std::string getStatus();
   SendChunkResponse(std::vector<char> &b);
   SendChunkResponse();
   void setChunkData(std::vector<char> &data);
   void setHash(std::string hash);
-  void setChunkIndex(int index);
+  void setChunkIndex(u_int32_t index);
   void setStatus(std::string status);
   virtual std::string getType();
   virtual std::vector<char> getBytes();

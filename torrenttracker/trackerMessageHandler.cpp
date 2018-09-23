@@ -4,6 +4,9 @@
 #include "trackerDatabase.h"
 #include <syslog.h>
 
+using std::cout;
+using std::endl;
+
 Response TrackerMessageHandler::handleShareRequest(std::vector<char> b)
 {
     Response res;
@@ -77,6 +80,7 @@ SeederInfoResponse TrackerMessageHandler::handleGetSeedsRequest(std::vector<char
         auto seeder_list = database.getSeederList(m->getHash());
         for (auto i : seeder_list)
         {
+            cout<< "handleGetSeedsRequest() adding seeder: " << i->getIp() << endl;
             res.addSeeder(*i);
         }
         res.setStatus("SUCCESS");

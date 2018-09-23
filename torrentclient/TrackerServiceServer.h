@@ -21,6 +21,7 @@ public:
   Response removeSeederRequest(RemoveSeeder msg);
   SeederInfoResponse getSeederInfo(SeederInfoRequest msg);
   void connectToTracker();
+  virtual ~TrackerServiceServer();
 };
 
 #endif

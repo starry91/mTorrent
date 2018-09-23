@@ -9,6 +9,10 @@
 #include <math.h>
 #include <syslog.h>
 #include "seeder.h"
+#include "errorMsg.h"
+
+using std::cout;
+        using std::endl;
 
 uint32_t nvtouint32(const std::vector<char> &arr)
 {
@@ -42,9 +46,15 @@ std::vector<char> readBytes(int n, int sock_fd)
     char buf[BUFSIZE];
     int count = 0;
     std::vector<char> ebuf;
+    cout << "Called readBytes fd: " << sock_fd << ", n: " << n << endl;
     while (count < n)
     {
+        cout << "before read: count: " << count << ", n: "<< n << endl;
         int temp_count = read(sock_fd, buf, BUFSIZE > (n - count) ? n - count : BUFSIZE);
+        cout << "after read: tmp_count: " << temp_count << endl;
+        if(temp_count == 0) {
+            throw ErrorMsg("connection closed");
+        }
         for (int i = 0; i < temp_count; i++)
         {
             ebuf.push_back(buf[i]);
@@ -98,6 +108,6 @@ int createTCPClient(Seeder client)
         exit(2);
         //return -1;
     }
-    syslog(0, "Connected to Tracker....");
+    cout << "createTCPClient() Connected to Tracker with fd: " << sock << endl;
     return sock;
 }

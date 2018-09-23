@@ -4,6 +4,32 @@
 #include <math.h>
 #include "fileHandler.h"
 
+mTorrent::mTorrent(){};
+
+//setters
+void mTorrent::setPath(std::string path)
+{
+    this->path = path;
+}
+void mTorrent::setHash(std::string hash)
+{
+    this->hash = hash;
+}
+void mTorrent::setFileName(std::string name)
+{
+    this->file_name = name;
+}
+void mTorrent::setFileSize(long size)
+{
+    this->file_size = size;
+}
+void mTorrent::setBitChunks(std::vector<u_int32_t> chunk_map)
+{
+    this->bit_chunks = chunk_map;
+}
+
+
+
 mTorrent::mTorrent(std::string path, std::string name)
 {
     FileHandler filehandler;
@@ -24,7 +50,7 @@ std::vector<u_int32_t> mTorrent::getBitChunks()
     return this->bit_chunks;
 }
 
-int mTorrent::getFileSize()
+long mTorrent::getFileSize()
 {
     return this->file_size;
 }

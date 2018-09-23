@@ -37,13 +37,12 @@ int main(int argc, char *argv[])
     auto ip_2 = std::string(strtok(argv[3], ":"));
     auto port_2 = std::string(strtok(NULL, ":"));
 
-    auto host = Seeder(ip_1, port_1);
+    auto host = Seeder(ip_host, port_host);
     auto tracker1 = Seeder(ip_1, port_1);
     auto tracker2 = Seeder(ip_2, port_2);
 
-    std::cout << "hello" << std::endl;
-    std::cout << "ip: " << tracker1.getIp() << " port: " << tracker1.getPort() << std::endl;
-    std::cout << "ip: " << tracker2.getIp() << " port: " << tracker2.getPort() << std::endl;
+    std::cout << "tracker1 ip: " << tracker1.getIp() << "tracker1 port: " << tracker1.getPort() << std::endl;
+    std::cout << "tracker2 ip: " << tracker2.getIp() << "tracker2 port: " << tracker2.getPort() << std::endl;
 
     ClientDatabase::getInstance().sethost(host);
     ClientDatabase::getInstance().setTracker1(tracker1);
@@ -61,10 +60,10 @@ int main(int argc, char *argv[])
 
     while (true)
     {
-        syslog(0, "hello");
+        cout << "in while in client main()" << endl;
         std::string command;
         std::getline(std::cin, command);
-        syslog(0, "command: [%s]", command.c_str());
+        cout << "in while in client main() got command" << command <<endl;
         std::thread t1(&CommandHandler::handleCommand, CommandHandler(), command);
         t1.detach();
     }

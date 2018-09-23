@@ -11,6 +11,7 @@ class FileHandler
   public:
     //generating mtorrent file
     void createMTorrent(mTorrent_Sptr torr);
+    mTorrent_Sptr readMTorrent(std::string path);
     //getting the hash of the file
     std::string getFileHash(std::string file_name);
     long fileSize(std::string path);

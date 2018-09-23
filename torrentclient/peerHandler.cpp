@@ -6,13 +6,17 @@
 #include "encoder.h"
 #include "logHandler.h"
 
+using std::cout;
+using std::endl;
+
 void PeerHandler::handleRpc(int client_fd)
 {
+    cout << "in PeerHandler::handleRpc() with fd: " <<  client_fd << endl;
     while (true)
     {
         NetworkReader reader(client_fd);
         auto byte_data = reader.readFromNetwork();
-        std::cout << "byte_data size: " << byte_data.size() << std::endl;
+        std::cout << "PeerHandler::handleRpc() byte_data size: " << byte_data.size() << std::endl;
         Decoder decoder;
         Encoder encoder;
         auto rpcbytepair = decoder.decodeMsgType(byte_data);
@@ -27,14 +31,14 @@ void PeerHandler::handleRpc(int client_fd)
         if (request == "CHUNKINFOREQUEST")
         {
             LogHandler::getInstance().logMsg("Recieved ChunkInfoRequest request");
-            std::cout << "hello1" << std::endl;
+            std::cout << "PeerHandler::handleRpc() hello1" << std::endl;
             auto res = msgHandler.handleChunkInfoRequest(byte_data);
             writer.writeToNetwork(encoder.encode(std::string("CHUNKINFORESPONSE"), res.getBytes()));
         }
         else if (request == "SENDCHUNKREQUEST")
         {
             LogHandler::getInstance().logMsg("Recieved Send Chunk request");
-            std::cout << "hello2" << std::endl;
+            std::cout << "PeerHandler::handleRpc() hello2" << std::endl;
             auto res = msgHandler.handlesendChunkRequest(byte_data);
             writer.writeToNetwork(encoder.encode(std::string("SENDCHUNKRESPONSE"), res.getBytes()));
         }

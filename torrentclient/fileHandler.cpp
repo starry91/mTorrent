@@ -13,7 +13,7 @@ void FileHandler::createMTorrent(mTorrent_Sptr torr)
 {
     std::ofstream myfile;
     myfile.open(torr->getfileName().c_str());
-    myfile.exceptions(std::ios::badbit);
+    //myfile.exceptions(std::ios::badbit);
     if (myfile.bad())
     {
         throw ErrorMsg("Invalid torrent path");
@@ -30,6 +30,38 @@ void FileHandler::createMTorrent(mTorrent_Sptr torr)
         myfile << ClientDatabase::getInstance().getTracker2().getPort() << "\n";
     }
     myfile.close();
+}
+
+mTorrent_Sptr FileHandler::readMTorrent(std::string file_name)
+{
+    std::ifstream file;
+    file.open(file_name, std::ios::in | std::ios::binary);
+    //myfile.exceptions(std::ios::badbit);
+    if (!file.good())
+    {
+        throw ErrorMsg("File does not exists");
+    }
+    std::string str;
+    mTorrent_Sptr mFile = std::make_shared<mTorrent>();
+
+    //path
+    mFile->setPath(file_name);
+
+    //hash
+    std::getline(file, str);
+    mFile->setHash(str);
+
+    //filename
+    std::getline(file, str);
+    mFile->setFileName(str);
+
+    //path
+    std::getline(file, str);
+    mFile->setFileSize(std::stol(str));
+
+    mFile->setBitChunks(std::vector<u_int32_t>(ceil((std::stol(str) * 1.0000) / CHUNK_SIZE), 1));
+
+    return mFile;
 }
 
 //getting the hash of the file
@@ -102,9 +134,9 @@ void FileHandler::readFileChunk(int chunk_index, std::string path, std::vector<c
     {
         throw ErrorMsg("File does not exists");
     }
-    file.seekg(CHUNK_SIZE*chunk_index);
+    file.seekg(CHUNK_SIZE * chunk_index);
     //cut it off to available bytes
-      // create a buffer
+    // create a buffer
     file.read(&buffer[0], buffer.size()); // read to buffer
     file.close();
 }
