@@ -30,8 +30,10 @@ void ClientDatabase::setLogPath(std::string path)
 
 void ClientDatabase::addMTorrent(mTorrent_Sptr torr)
 {
+    std::lock_guard<std::mutex> lock(this->seeder_mtx);
     if (this->files.find(torr->getHash()) == this->files.end())
     {
+        std::cout << "In Client Database, adding new torfile: " << torr->getfileName() << std::endl;
         this->files[torr->getHash()] = torr;
     }
 }
@@ -56,3 +58,27 @@ mTorrent_Sptr ClientDatabase::getmTorrent(std::string hash)
     //handle error
     return this->files[hash];
 }
+
+bool ClientDatabase::hasFile(std::string hash)
+{
+    std::lock_guard<std::mutex> lock(this->seeder_mtx);
+    if (this->files.find(hash) != this->files.end())
+        return true;
+    else
+        return false;
+}
+
+void ClientDatabase::updateChunkInfo(std::string hash, int index, int val)
+{
+    std::lock_guard<std::mutex> lock(this->seeder_mtx);
+    if (this->files.find(hash) != this->files.end())
+    {
+        this->files[hash]->updateChunk(index, val);
+    }
+}
+
+std::mutex &ClientDatabase::getSeederMtx()
+{
+    return this->seeder_mtx;
+}
+

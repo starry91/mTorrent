@@ -12,6 +12,7 @@ class DownloadManager {
     void addFile(down_Sptr);
     down_Sptr getFile(std::string hash);
     void updateFileChunkStatus(std::string hash, int index, int val);
+    void addSeederRequestToTracker(std::string hash);
 };
 
 #endif

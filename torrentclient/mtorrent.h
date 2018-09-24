@@ -6,9 +6,11 @@
 #include <map>
 #include <vector>
 #include <memory>
+#include <mutex>
 
 class mTorrent
 {
+  std::mutex mTorr_mutex;
   std::string path;
   std::string hash;
   std::string file_name;
@@ -31,6 +33,7 @@ public:
   void setFileName(std::string);
   void setFileSize(long);
   void setBitChunks(std::vector<u_int32_t>);
+  void clearBitChunks();
 };
 
 typedef std::shared_ptr<mTorrent> mTorrent_Sptr;

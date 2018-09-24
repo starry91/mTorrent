@@ -28,7 +28,10 @@ void mTorrent::setBitChunks(std::vector<u_int32_t> chunk_map)
     this->bit_chunks = chunk_map;
 }
 
-
+void mTorrent::clearBitChunks()
+{
+    std::fill(this->bit_chunks.begin(), this->bit_chunks.end(), 0);
+}
 
 mTorrent::mTorrent(std::string path, std::string name)
 {

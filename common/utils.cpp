@@ -10,9 +10,10 @@
 #include <syslog.h>
 #include "seeder.h"
 #include "errorMsg.h"
+#include "openssl/sha.h"
 
 using std::cout;
-        using std::endl;
+using std::endl;
 
 uint32_t nvtouint32(const std::vector<char> &arr)
 {
@@ -46,14 +47,15 @@ std::vector<char> readBytes(int n, int sock_fd)
     char buf[BUFSIZE];
     int count = 0;
     std::vector<char> ebuf;
-    cout << "Called readBytes fd: " << sock_fd << ", n: " << n << endl;
+    //cout << "Called readBytes fd: " << sock_fd << ", n: " << n << endl;
     while (count < n)
     {
-        cout << "before read: count: " << count << ", n: "<< n << endl;
+       // cout << "before read: count: " << count << ", n: " << n << endl;
         int temp_count = read(sock_fd, buf, BUFSIZE > (n - count) ? n - count : BUFSIZE);
-        cout << "after read: tmp_count: " << temp_count << endl;
-        if(temp_count <= 0) {
-            cout << "readBytes() connection closed, fd: " + std::to_string(sock_fd) << endl;
+        //cout << "after read: tmp_count: " << temp_count << endl;
+        if (temp_count <= 0)
+        {
+            //cout << "readBytes() connection closed, fd: " + std::to_string(sock_fd) << endl;
             throw ErrorMsg("connection closed, fd: " + std::to_string(sock_fd));
         }
         for (int i = 0; i < temp_count; i++)
@@ -111,4 +113,22 @@ int createTCPClient(Seeder client)
     }
     cout << "createTCPClient() Connected to Tracker with fd: " << sock << endl;
     return sock;
+}
+
+std::string getChunkHash(std::vector<char> bytes)
+{
+    std::string hash = "";
+    unsigned char hash_buff[SHA_DIGEST_LENGTH];
+    SHA1(reinterpret_cast<const unsigned char *>(bytes.data()), bytes.size(), hash_buff);
+
+    char mdString[SHA_DIGEST_LENGTH * 2];
+
+    for (int i = 0; i < SHA_DIGEST_LENGTH; i++)
+    {
+        sprintf(&mdString[i * 2], "%02x", (unsigned int)hash_buff[i]);
+    }
+    std::string chunk_hash = std::string((char *)mdString);
+    hash += chunk_hash.substr(0, 20);
+    //syslog(0, "In Get Chunk Hash: Chunk Hash: [%s]", chunk_hash.c_str());
+    return hash;
 }

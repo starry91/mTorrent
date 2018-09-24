@@ -11,6 +11,7 @@ Download::Download(std::string hash, std::string file_name, std::string path, in
     this->total_chunks = tot_chunks;
     this->downloadStatus = 0;
     this->downloaded_chunks = 0;
+    this->chunk_map.resize(tot_chunks);
 }
 //setters
 void Download::setHash(std::string)
@@ -32,6 +33,7 @@ std::string Download::getHash()
 
 std::string Download::getFileName()
 {
+    std::cout << "In Download class, getFileName|| [" << this->file_name << "]" << std::endl;
     this->file_name;
 }
 
@@ -42,6 +44,7 @@ int Download::getTotalChunks()
 
 void Download::updateChunkStatus(int index, int val)
 {
+    std::cout << "In Download class,updateChunkStatus|| Chunk Map size: " << this->chunk_map.size() << std::endl;
     this->chunk_map[index] = val;
 }
 

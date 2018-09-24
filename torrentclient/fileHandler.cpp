@@ -107,7 +107,7 @@ std::string FileHandler::getFileHash(std::string file_name)
         }
         std::string chunk_hash = std::string((char *)mdString);
         hash += chunk_hash.substr(0, 20);
-        syslog(0, "Chunk Hash: [%s]", chunk_hash.c_str());
+        //syslog(0, "Chunk Hash: [%s]", chunk_hash.c_str());
     }
     return hash;
 }

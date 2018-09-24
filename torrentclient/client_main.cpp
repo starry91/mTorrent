@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 
     if (argc == 5)
     {
-        cout << "got log path" << endl;
+        // cout << "got log path" << endl;
         ClientDatabase::getInstance().setLogPath(std::string(argv[4]));
         LogHandler::getInstance().setLogPath(std::string(argv[4]));
     }
@@ -60,10 +60,10 @@ int main(int argc, char *argv[])
 
     while (true)
     {
-        cout << "in while in client main()" << endl;
+        // cout << "in while in client main()" << endl;
         std::string command;
         std::getline(std::cin, command);
-        cout << "in while in client main() got command" << command <<endl;
+        // cout << "in while in client main() got command" << command <<endl;
         std::thread t1(&CommandHandler::handleCommand, CommandHandler(), command);
         t1.detach();
     }

@@ -34,6 +34,9 @@ class ClientDatabase
     Seeder getTracker1();
     Seeder getTracker2();
     mTorrent_Sptr getmTorrent(std::string hash);
+    bool hasFile(std::string hash);
+    std::mutex& getSeederMtx();
+    void updateChunkInfo(std::string hash, int index, int val);
 };
 
 #endif
