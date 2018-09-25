@@ -141,7 +141,7 @@ void CommandHandler::handleCommand(std::string command)
             }
             //auto seeders = this->getSeeders(args[1]);
         }
-        else if (args[0] == "show" && args.size() == 2)
+        else if (args[0] == "show" && args.size() == 2 && args[1] == "downloads")
         {
             DownloadManager::getInstance().printDownloads();
         }
