@@ -29,6 +29,7 @@ class ClientDatabase
     void sethost(Seeder tracker);
     void setLogPath(std::string path);
     void addMTorrent(mTorrent_Sptr);
+    void removeMTorrent(std::string hash);
     
     Seeder getHost();
     Seeder getTracker1();

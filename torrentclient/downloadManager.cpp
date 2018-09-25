@@ -52,3 +52,16 @@ void DownloadManager::printDownloads()
         std::cout << std::setw(15) << file->getFileName() << std::setw(8) << (file->getStatus() == 1 ? "[S]" : "[D]") << std::endl;
     }
 }
+
+int DownloadManager::getDownloadStatus(std::string hash)
+{
+    return this->dMap[hash]->getStatus();
+}
+
+bool DownloadManager::hasDownloaded(std::string hash)
+{
+    if (this->dMap.find(hash) == this->dMap.end())
+        return false;
+    else
+        return true;
+}

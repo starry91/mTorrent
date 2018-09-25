@@ -14,6 +14,8 @@ class DownloadManager {
     void updateFileChunkStatus(std::string hash, int index, int val);
     void addSeederRequestToTracker(std::string hash);
     void printDownloads();
+    int getDownloadStatus(std::string hash);
+    bool hasDownloaded(std::string hash);
 };
 
 #endif

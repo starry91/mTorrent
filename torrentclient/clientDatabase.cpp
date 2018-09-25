@@ -82,3 +82,11 @@ std::mutex &ClientDatabase::getSeederMtx()
     return this->seeder_mtx;
 }
 
+void ClientDatabase::removeMTorrent(std::string hash)
+{
+    if (this->files.find(hash) != this->files.end())
+    {
+        std::cout << "In client database, Removing file: " << this->files[hash]->getfileName() << std::endl;
+        this->files.erase(hash);
+    }
+}

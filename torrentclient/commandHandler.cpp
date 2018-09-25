@@ -145,6 +145,45 @@ void CommandHandler::handleCommand(std::string command)
         {
             DownloadManager::getInstance().printDownloads();
         }
+        else if (args[0] == "remove" && args.size() == 2)
+        {
+            FileHandler fhandler;
+            auto mtorrPtr = fhandler.readMTorrent(args[1]);
+            if (DownloadManager::getInstance().hasDownloaded(mtorrPtr->getHash()))
+            {
+                int status = DownloadManager::getInstance().getDownloadStatus(mtorrPtr->getHash());
+                cout << "In command handler, getting file status: " << status << std::endl;
+                if (status == 1)
+                {
+                    RemoveSeeder req;
+                    req.setHash(mtorrPtr->getHash());
+                    req.setIp(ClientDatabase::getInstance().getHost().getIp());
+                    req.setPort(ClientDatabase::getInstance().getHost().getPort());
+                    cout << "In command handler, sending remove seeder req: " << status << std::endl;
+                    TrackerServiceServer trackerCommunicator(ClientDatabase::getInstance().getTracker1(), ClientDatabase::getInstance().getTracker2());
+                    Response res = trackerCommunicator.removeSeederRequest(req);
+                    if (res.getResponse() == "SUCCESS")
+                    {
+                        ClientDatabase::getInstance().removeMTorrent(mtorrPtr->getHash());
+                        cout << "SUCCESS" << endl;
+                    }
+                }
+            }
+            else
+            {
+                RemoveSeeder req;
+                req.setHash(mtorrPtr->getHash());
+                req.setIp(ClientDatabase::getInstance().getHost().getIp());
+                req.setPort(ClientDatabase::getInstance().getHost().getPort());
+                TrackerServiceServer trackerCommunicator(ClientDatabase::getInstance().getTracker1(), ClientDatabase::getInstance().getTracker2());
+                Response res = trackerCommunicator.removeSeederRequest(req);
+                if (res.getResponse() == "SUCCESS")
+                {
+                    ClientDatabase::getInstance().removeMTorrent(mtorrPtr->getHash());
+                    cout << "SUCCESS" << endl;
+                }
+            }
+        }
         else
         {
             std::cerr << "Invalid Command" << endl;
