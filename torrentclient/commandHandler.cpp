@@ -141,6 +141,10 @@ void CommandHandler::handleCommand(std::string command)
             }
             //auto seeders = this->getSeeders(args[1]);
         }
+        else if (args[0] == "show" && args.size() == 2)
+        {
+            DownloadManager::getInstance().printDownloads();
+        }
         else
         {
             std::cerr << "Invalid Command" << endl;

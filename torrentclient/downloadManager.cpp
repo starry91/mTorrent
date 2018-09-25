@@ -3,6 +3,7 @@
 #include "clientDatabase.h"
 #include "message.h"
 #include "commandHandler.h"
+#include <iomanip>
 
 DownloadManager::DownloadManager() {}
 
@@ -27,8 +28,8 @@ void DownloadManager::updateFileChunkStatus(std::string hash, int index, int val
     dptr->updateChunkStatus(index, val);
     if (val == 1)
     {
-       // std::cout << "In Download manager, Updating chunk info: " << dptr->getFileName() << " for chunk index: " << index << std::endl;
-        dptr->incrementDownloadedChunks();//setTotalChunks(dptr->getTotalChunks() + 1);
+        // std::cout << "In Download manager, Updating chunk info: " << dptr->getFileName() << " for chunk index: " << index << std::endl;
+        dptr->incrementDownloadedChunks(); //setTotalChunks(dptr->getTotalChunks() + 1);
     }
 }
 
@@ -40,4 +41,14 @@ void DownloadManager::addSeederRequestToTracker(std::string hash)
     req.setIp(ClientDatabase::getInstance().getHost().getIp());
     req.setPort(ClientDatabase::getInstance().getHost().getPort());
     Response res = trackerCommunicator.addSeederRequest(req);
+}
+
+void DownloadManager::printDownloads()
+{
+    std::cout << std::setw(15) << "File Name " << std::setw(8) << "Status" << std::endl;
+    for (auto it : this->dMap)
+    {
+        auto file = it.second;
+        std::cout << std::setw(15) << file->getFileName() << std::setw(8) << (file->getStatus() == 1 ? "[S]" : "[D]") << std::endl;
+    }
 }

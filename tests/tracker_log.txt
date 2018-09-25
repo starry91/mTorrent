@@ -1744,3 +1744,291 @@ Tue Sep 25 16:04:58 2018
 : Recieved AddSeeder request
 Tue Sep 25 16:04:58 2018
 : Recieved AddSeeder request
+Tue Sep 25 16:26:18 2018
+: Client started
+Tue Sep 25 16:26:18 2018
+: Updated log path in Database
+Tue Sep 25 16:26:18 2018
+: Updated main tracker in Database
+Tue Sep 25 16:26:18 2018
+: Updated seeder file path in Database
+Tue Sep 25 16:26:18 2018
+: Database: Reading seeder file
+Tue Sep 25 16:26:41 2018
+: Recieved share request
+Tue Sep 25 16:26:41 2018
+: Database: Added new file entry
+Tue Sep 25 16:26:52 2018
+: Recieved SeederInfoRequest request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Database: Added new seeder entry
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:53 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:26:54 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:32:45 2018
+: Client started
+Tue Sep 25 16:32:45 2018
+: Updated log path in Database
+Tue Sep 25 16:32:45 2018
+: Updated main tracker in Database
+Tue Sep 25 16:32:45 2018
+: Updated seeder file path in Database
+Tue Sep 25 16:32:45 2018
+: Database: Reading seeder file
+Tue Sep 25 16:33:02 2018
+: Recieved share request
+Tue Sep 25 16:33:02 2018
+: Database: Added new file entry
+Tue Sep 25 16:33:10 2018
+: Recieved SeederInfoRequest request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Database: Added new seeder entry
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:11 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:33:12 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:14 2018
+: Client started
+Tue Sep 25 16:35:14 2018
+: Updated log path in Database
+Tue Sep 25 16:35:14 2018
+: Updated main tracker in Database
+Tue Sep 25 16:35:14 2018
+: Updated seeder file path in Database
+Tue Sep 25 16:35:14 2018
+: Database: Reading seeder file
+Tue Sep 25 16:35:23 2018
+: Recieved share request
+Tue Sep 25 16:35:23 2018
+: Database: Added new file entry
+Tue Sep 25 16:35:37 2018
+: Recieved SeederInfoRequest request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Database: Added new seeder entry
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:38 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:35:39 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:37:11 2018
+: Recieved share request
+Tue Sep 25 16:37:11 2018
+: Database: Added new file entry
+Tue Sep 25 16:37:18 2018
+: Recieved SeederInfoRequest request
+Tue Sep 25 16:37:18 2018
+: Recieved AddSeeder request
+Tue Sep 25 16:37:18 2018
+: Database: Added new seeder entry
+Tue Sep 25 16:37:18 2018
+: Recieved AddSeeder request

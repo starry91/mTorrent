@@ -34,7 +34,7 @@ std::string Download::getHash()
 std::string Download::getFileName()
 {
     std::cout << "In Download class, getFileName|| [" << this->file_name << "]" << std::endl;
-    this->file_name;
+    return this->file_name;
 }
 
 int Download::getTotalChunks()
@@ -55,4 +55,9 @@ void Download::incrementDownloadedChunks()
     {
         this->downloadStatus = 1;
     }
+}
+
+int Download::getStatus()
+{
+    return this->downloadStatus;
 }
