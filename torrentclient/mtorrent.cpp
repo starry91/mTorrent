@@ -21,6 +21,7 @@ void mTorrent::setFileName(std::string name)
 }
 void mTorrent::setFileSize(long size)
 {
+    std::cout << "In mTorrent class, Full file size: " << size << std::endl;
     this->file_size = size;
 }
 void mTorrent::setBitChunks(std::vector<u_int32_t> chunk_map)
@@ -35,12 +36,14 @@ void mTorrent::clearBitChunks()
 
 mTorrent::mTorrent(std::string path, std::string name)
 {
+    ///put debugs here
     FileHandler filehandler;
     this->path = path;
     this->hash = filehandler.getFileHash(path);
     this->file_name = name;
     this->file_size = filehandler.fileSize(path);
     this->bit_chunks = std::vector<u_int32_t>(ceil((this->file_size * 1.0000) / CHUNK_SIZE), 1);
+    std::cout << "In mtorr Class, " << this->bit_chunks.size() << std::endl;
 }
 
 std::string mTorrent::getfileName()

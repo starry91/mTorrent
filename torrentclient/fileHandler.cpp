@@ -144,12 +144,22 @@ void FileHandler::readFileChunk(int chunk_index, std::string path, std::vector<c
     file.close();
 }
 
-void FileHandler::createEmptyFile(std::string path, int size)
+void FileHandler::createEmptyFile(std::string path, long size)
 {
     //create empty file
     std::fstream outfile;
     outfile.open(path, std::ios::trunc | std::ios::out | std::ios::binary);
-    char buf[size];
-    outfile.write(buf, size);
+    if (outfile.is_open())
+    {
+        std::cout << "In Filehandler, Creating empty file of size: " << size << std::endl;
+        char* buf = new char[size];
+        std::cout << "In Filehandler, Creating buffer of size: " << size << std::endl;
+        outfile.write(buf, size);
+        std::cout << "In Filehandler, Created empty file of size: " << size << std::endl;
+    }
+    else
+    {
+        std::cout << "In Filehandler, unable to create empty file of size: " << size << std::endl;
+    }
     outfile.close();
 }
