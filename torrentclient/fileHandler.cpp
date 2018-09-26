@@ -8,11 +8,14 @@
 #include "openssl/sha.h"
 #include "errorMsg.h"
 
+using std::cout;
+using std::endl;
+
 //generating mtorrent file
 void FileHandler::createMTorrent(mTorrent_Sptr torr)
 {
     std::ofstream myfile;
-    myfile.open(torr->getfileName().c_str());
+    myfile.open(torr->getMTorrPath().c_str());
     //myfile.exceptions(std::ios::badbit);
     if (myfile.bad())
     {
@@ -20,9 +23,14 @@ void FileHandler::createMTorrent(mTorrent_Sptr torr)
     }
     if (myfile.is_open())
     {
+        // auto filename = torr->getPath().substr(torr->getPath().find_last_of("/")+1);
+        // if (filename.size() == 0)
+        // {
+        //     throw ErrorMsg("Invalid Path");
+        // }
         syslog(0, "Writing file to: [%s]", torr->getPath().c_str());
         myfile << torr->getHash() << "\n";
-        myfile << torr->getPath() << "\n";
+        myfile << torr->getfileName() << "\n";
         myfile << torr->getFileSize() << "\n";
         myfile << ClientDatabase::getInstance().getTracker1().getIp() << "\n";
         myfile << ClientDatabase::getInstance().getTracker1().getPort() << "\n";
@@ -149,10 +157,11 @@ void FileHandler::createEmptyFile(std::string path, long size)
     //create empty file
     std::fstream outfile;
     outfile.open(path, std::ios::trunc | std::ios::out | std::ios::binary);
+    cout << "In Filehandler, Creating empty file, file path: "<< path << endl;
     if (outfile.is_open())
     {
         std::cout << "In Filehandler, Creating empty file of size: " << size << std::endl;
-        char* buf = new char[size];
+        char *buf = new char[size];
         std::cout << "In Filehandler, Creating buffer of size: " << size << std::endl;
         outfile.write(buf, size);
         std::cout << "In Filehandler, Created empty file of size: " << size << std::endl;

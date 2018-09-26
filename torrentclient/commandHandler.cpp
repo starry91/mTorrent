@@ -30,18 +30,15 @@ void CommandHandler::handleCommand(std::string command)
             FileHandler filehandler;
 
             // std::cout << "args[1]: " << args[1] << "args[2]: " << args[2] << endl;
-
             auto mtorr = std::make_shared<mTorrent>(args[1], args[2]);
             filehandler.createMTorrent(mtorr);
 
             //updating database
             ClientDatabase::getInstance().addMTorrent(mtorr);
 
-            auto filename = mtorr->getfileName().substr(mtorr->getfileName().find_last_of("/"));
-
             //creating share msg for the rpc call
             Share msg;
-            msg.setFileName(filename);
+            msg.setFileName(mtorr->getfileName());
             msg.setHash(mtorr->getHash());
             msg.setIp(ClientDatabase::getInstance().getHost().getIp());
             msg.setPort(ClientDatabase::getInstance().getHost().getPort());
@@ -68,7 +65,7 @@ void CommandHandler::handleCommand(std::string command)
             FileHandler fhandler;
             // std::cout << "CommandHandler::handleCommand() before Mtorr" << std::endl;
             auto mtorrPtr = fhandler.readMTorrent(args[1]);
-
+            cout << "Int download, after reading mTorrent: " << mtorrPtr->getfileName() << endl;
             // std::cout << "CommandHandler::handleCommand() read Mtorr" << std::endl;
 
             // std::cout << "CommandHandler::handleCommand() Mtorr hash: " << mtorrPtr->getHash() << std::endl;
@@ -107,16 +104,18 @@ void CommandHandler::handleCommand(std::string command)
                 }
 
                 //create empty file
-                auto filename = mtorrPtr->getfileName().substr(mtorrPtr->getfileName().find_last_of("/"));
-                auto destfilepath = args[2] + "/" + filename;
+                // auto filename = mtorrPtr->getfileName().substr(mtorrPtr->getfileName().find_last_of("/") + 1);
+                // auto destfilepath = args[2] + "/" + filename;
+                auto destfilepath = args[2] + "/" + mtorrPtr->getfileName();
                 fhandler.createEmptyFile(destfilepath, mtorrPtr->getFileSize());
 
-                //cout << "CommandHandler::handleCommand() File name: " << mtorrPtr->getfileName() << endl;
+                cout << "Int download, after creating empty file: " << destfilepath << endl;
+                //cout << "CommandHandler::handleCommand() File name:    " << mtorrPtr->getfileName() << endl;
 
                 //std::shared_ptr<ChunkSaver> threads[chunk_source.size()];
 
                 std::vector<std::thread> thread_arr;
-                down_Sptr dPtr = std::make_shared<Download>(Download(mtorrPtr->getHash(), filename, destfilepath, chunk_source.size()));
+                down_Sptr dPtr = std::make_shared<Download>(Download(mtorrPtr->getHash(), mtorrPtr->getfileName(), destfilepath, chunk_source.size()));
                 std::cout << "Total chunks to be downloaded: " << dPtr->getTotalChunks() << std::endl;
                 DownloadManager::getInstance().addFile(dPtr);
                 // download chunks

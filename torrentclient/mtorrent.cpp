@@ -34,13 +34,17 @@ void mTorrent::clearBitChunks()
     std::fill(this->bit_chunks.begin(), this->bit_chunks.end(), 0);
 }
 
-mTorrent::mTorrent(std::string path, std::string name)
+mTorrent::mTorrent(std::string path, std::string mTorr_path)
 {
+
+    auto filename = mTorr_path.substr(mTorr_path.find_last_of("/") + 1);
+    std::cout << "In mTorrent, file name: " << filename << std::endl;
     ///put debugs here
     FileHandler filehandler;
     this->path = path;
+    this->mTorr_path = mTorr_path;
     this->hash = filehandler.getFileHash(path);
-    this->file_name = name;
+    this->file_name = file_name;
     this->file_size = filehandler.fileSize(path);
     this->bit_chunks = std::vector<u_int32_t>(ceil((this->file_size * 1.0000) / CHUNK_SIZE), 1);
     std::cout << "In mtorr Class, " << this->bit_chunks.size() << std::endl;
@@ -74,4 +78,9 @@ std::string mTorrent::getPath()
 void mTorrent::updateChunk(u_int32_t index, u_int32_t val)
 {
     this->bit_chunks[index] = val;
+}
+
+std::string mTorrent::getMTorrPath()
+{
+    return this->mTorr_path;
 }

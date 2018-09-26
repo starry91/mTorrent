@@ -14,6 +14,7 @@ class mTorrent
   std::string path;
   std::string hash;
   std::string file_name;
+  std::string mTorr_path;
   long file_size;
   std::vector<u_int32_t> bit_chunks;
 
@@ -24,6 +25,7 @@ public:
   std::string getHash();
   std::string getfileName();
   long getFileSize();
+  std::string getMTorrPath();
   std::vector<u_int32_t> getBitChunks();
   void updateChunk(u_int32_t index, u_int32_t val);
 
