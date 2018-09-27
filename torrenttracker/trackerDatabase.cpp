@@ -4,6 +4,8 @@
 #include <syslog.h>
 #include <fstream>
 #include "logHandler.h"
+#include "TrackerServiceServer.h"
+#include "errorMsg.h"
 
 TrackerDatabase::TrackerDatabase()
 {
@@ -189,4 +191,37 @@ void TrackerDatabase::updateSeederfile()
             out << std::endl;
         }
     }
+}
+
+std::string TrackerDatabase::getSeederFilePath()
+{
+    return this->seeder_file_path;
+}
+
+void TrackerDatabase::syncSeederFile()
+{
+    try
+    {
+        std::cout << "handleCommand() sending msg" << std::endl;
+        TrackerServiceServer trackerCommunicator(TrackerDatabase::getInstance().getSecondayTracker());
+        SyncSeederListRequest msg;
+        auto res = trackerCommunicator.syncSeederFile(msg);
+        this->writeToSeederfile(res.getBytes());
+        //this->printResponse(msg.getType(), res);
+        std::cout << "handleCommand() Got reponse" << std::endl;
+    }
+    catch(ErrorMsg e) {
+        
+    }
+}
+
+void TrackerDatabase::writeToSeederfile(std::vector<char> bytes)
+{
+    LogHandler::getInstance().logMsg("Database: Updating seeder file");
+    std::ofstream out(this->seeder_file_path, std::ofstream::trunc);
+    if (out.is_open())
+    {
+        out.write(bytes.data(), bytes.size());
+    }
+    out.close();
 }

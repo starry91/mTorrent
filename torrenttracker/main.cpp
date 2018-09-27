@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     TrackerDatabase::getInstance().setMainTracker(tracker1);
     TrackerDatabase::getInstance().setSecondaryTracker(tracker2);
     TrackerDatabase::getInstance().setSeederFilePath(std::string(argv[3]));
+    TrackerDatabase::getInstance().syncSeederFile();
     TrackerDatabase::getInstance().readSeederfile();
 
     int server_fd, opt = 1;

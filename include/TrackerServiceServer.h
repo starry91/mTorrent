@@ -26,6 +26,7 @@ public:
   ChunkInfoResponse getChunkInfo(ChunkInfoRequest req);
   SendChunkResponse getChunk(SendChunkRequest req);
   SeederInfoResponse getSeederInfo(SeederInfoRequest msg);
+  SyncSeederListResponse syncSeederFile(SyncSeederListRequest msg);
   void connectToTracker();
   virtual ~TrackerServiceServer();
 };

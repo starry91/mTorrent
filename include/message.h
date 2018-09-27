@@ -204,8 +204,6 @@ public:
   virtual std::vector<char> getBytes();
 };
 
-
-
 //------------------------------------------------------------Message: SyncShare----------------------------------------------------------------------------
 class SyncShare : public Message
 {
@@ -269,5 +267,25 @@ public:
   virtual std::vector<char> getBytes();
 };
 
+//------------------------------------------------------------Message: SyncSeederList----------------------------------------------------------------------------
+class SyncSeederListRequest : public Message
+{
+public:
+  SyncSeederListRequest();
+  virtual std::string getType();
+  virtual std::vector<char> getBytes();
+};
+
+//------------------------------------------------------------Message: SeederInfoResponse----------------------------------------------------------------------------
+class SyncSeederListResponse : public Message
+{
+  std::vector<char> bytes;
+
+public:
+  SyncSeederListResponse(std::vector<char> b);
+  SyncSeederListResponse();
+  virtual std::string getType();
+  virtual std::vector<char> getBytes();
+};
 
 #endif

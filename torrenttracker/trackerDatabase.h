@@ -35,9 +35,12 @@ public:
   std::vector<seeder_Sptr> getSeederList(std::string hash);
   Seeder getMainTracker();
   Seeder getSecondayTracker();
+  std::string getSeederFilePath();
   bool exists(std::string hash);
   void readSeederfile();
   void updateSeederfile();
+  void syncSeederFile();
+  void writeToSeederfile(std::vector<char> bytes);
 };
 
 #endif

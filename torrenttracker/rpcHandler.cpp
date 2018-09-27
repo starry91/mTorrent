@@ -135,6 +135,15 @@ void RpcHandler::handleRpc(int client_fd)
                 writer.writeToNetwork(encoder.encode(std::string("SEEDERINFORESPONSE"), res.getBytes()));
                 //std::cout << "handleRpc() in SEEDERINFOREQUEST after writing handleGetSeedsRequest" << std::endl;
             }
+            else if (request == "SYNCSEEDERLISTREQUEST")
+            {
+                std::cout << "Recieved Sync Seeder Info request" << std::endl;
+                LogHandler::getInstance().logMsg("Recieved SeederInfoRequest request");
+                auto res = msgHandler.handleSyncSeederRequest();
+                //std::cout << "handleRpc() in SEEDERINFOREQUEST after handleGetSeedsRequest" << std::endl;
+                writer.writeToNetwork(encoder.encode(std::string("SYNCSEEDERLISTRESPONSE"), res.getBytes()));
+                //std::cout << "handleRpc() in SEEDERINFOREQUEST after writing handleGetSeedsRequest" << std::endl;
+            }
             else
             {
                 NetworkWriter writer(client_fd);

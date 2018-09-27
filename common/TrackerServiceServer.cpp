@@ -19,12 +19,19 @@ TrackerServiceServer::TrackerServiceServer(Seeder tracker1, Seeder tracker2)
         //cout << "TrackerServiceServer() tracker1: " << tracker1.getIp() << ", " << tracker1.getPort() << endl;
         this->tracker_fd = createTCPClient(tracker1);
     }
-    catch (std::exception e)
+    catch (ErrorMsg e)
     {
         //cout << "TrackerServiceServer() tracker2: " << tracker2.getIp() << ", " << tracker2.getPort() << endl;
-        this->tracker_fd = createTCPClient(tracker2);
+        try
+        {
+            this->tracker_fd = createTCPClient(tracker2);
+        }
+        catch (std::exception e)
+        {
+            throw ErrorMsg("Unable to establish connection");
+        }
     }
-   // cout << "### Created TrackerServiceServer with fd: " << this->tracker_fd << endl;
+    // cout << "### Created TrackerServiceServer with fd: " << this->tracker_fd << endl;
 }
 
 TrackerServiceServer::TrackerServiceServer(Seeder tracker1)
@@ -41,10 +48,8 @@ TrackerServiceServer::TrackerServiceServer(Seeder tracker1)
     //cout << "### Created TrackerServiceServer with fd: " << this->tracker_fd << endl;
 }
 
-
-
-
-TrackerServiceServer::~TrackerServiceServer() {
+TrackerServiceServer::~TrackerServiceServer()
+{
     //cout << "### Closing TrackerServiceServer() with fd: " << this->tracker_fd << endl;
     close(this->tracker_fd);
 }
@@ -55,7 +60,7 @@ Response TrackerServiceServer::shareFile(Share msg)
     Encoder encoder;
     auto b = encoder.encode("SHARE", msg.getBytes());
     NetworkWriter writer(this->tracker_fd);
-   // cout << "in shareFile() witing rpc & request of size: " <<  b.size() << endl;
+    // cout << "in shareFile() witing rpc & request of size: " <<  b.size() << endl;
     writer.writeToNetwork(b);
 
     NetworkReader reader(this->tracker_fd);
@@ -97,14 +102,13 @@ Response TrackerServiceServer::removeSeederRequest(RemoveSeeder msg)
 
 //-----------------------------------------------Sync messages-------------------------------------
 
-
 Response TrackerServiceServer::syncshareFile(SyncShare msg)
 {
     //cout << "in shareFile() with msg: " <<  msg.getFileName() << endl;
     Encoder encoder;
     auto b = encoder.encode("SYNCSHARE", msg.getBytes());
     NetworkWriter writer(this->tracker_fd);
-   // cout << "in shareFile() witing rpc & request of size: " <<  b.size() << endl;
+    // cout << "in shareFile() witing rpc & request of size: " <<  b.size() << endl;
     writer.writeToNetwork(b);
 
     NetworkReader reader(this->tracker_fd);
@@ -144,14 +148,6 @@ Response TrackerServiceServer::syncremoveSeederRequest(SyncRemoveSeeder msg)
     return Response(msg_pair.second);
 }
 
-
-
-
-
-
-
-
-
 SeederInfoResponse TrackerServiceServer::getSeederInfo(SeederInfoRequest msg)
 {
     Encoder encoder;
@@ -171,7 +167,8 @@ SeederInfoResponse TrackerServiceServer::getSeederInfo(SeederInfoRequest msg)
     return SeederInfoResponse(msg_pair.second);
 }
 
-ChunkInfoResponse TrackerServiceServer::getChunkInfo(ChunkInfoRequest req) {
+ChunkInfoResponse TrackerServiceServer::getChunkInfo(ChunkInfoRequest req)
+{
     Encoder encoder;
     auto b = encoder.encode("CHUNKINFOREQUEST", req.getBytes());
     NetworkWriter writer(this->tracker_fd);
@@ -181,12 +178,13 @@ ChunkInfoResponse TrackerServiceServer::getChunkInfo(ChunkInfoRequest req) {
     auto response_b = reader.readFromNetwork();
     Decoder decoder;
     auto msg_pair = decoder.decodeMsgType(response_b);
-   // std::cout << "getSeederInfo response msg type after decoding: " << msg_pair.first <<std::endl;
+    // std::cout << "getSeederInfo response msg type after decoding: " << msg_pair.first <<std::endl;
     //std::cout << "getSeederInfo response msg size after decoding: " << msg_pair.second.size() <<std::endl;
     return ChunkInfoResponse(msg_pair.second);
 }
 
-SendChunkResponse TrackerServiceServer::getChunk(SendChunkRequest req) {
+SendChunkResponse TrackerServiceServer::getChunk(SendChunkRequest req)
+{
     Encoder encoder;
     auto b = encoder.encode("SENDCHUNKREQUEST", req.getBytes());
     NetworkWriter writer(this->tracker_fd);
@@ -196,7 +194,21 @@ SendChunkResponse TrackerServiceServer::getChunk(SendChunkRequest req) {
     auto response_b = reader.readFromNetwork();
     Decoder decoder;
     auto msg_pair = decoder.decodeMsgType(response_b);
-   // std::cout << "getChunk response msg type after decoding: " << msg_pair.first <<std::endl;
+    // std::cout << "getChunk response msg type after decoding: " << msg_pair.first <<std::endl;
     //std::cout << "getChunk response msg size after decoding: " << msg_pair.second.size() <<std::endl;
     return SendChunkResponse(msg_pair.second);
+}
+
+SyncSeederListResponse TrackerServiceServer::syncSeederFile(SyncSeederListRequest msg)
+{
+    Encoder encoder;
+    auto b = encoder.encode("SYNCSEEDERLISTREQUEST", msg.getBytes());
+    NetworkWriter writer(this->tracker_fd);
+    writer.writeToNetwork(b);
+
+    NetworkReader reader(this->tracker_fd);
+    auto response_b = reader.readFromNetwork();
+    Decoder decoder;
+    auto msg_pair = decoder.decodeMsgType(response_b);
+    return SyncSeederListResponse(msg_pair.second);
 }

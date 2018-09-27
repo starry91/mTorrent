@@ -806,8 +806,6 @@ void Response::setResponse(std::string response)
   this->response = response;
 }
 
-
-
 //------------------------------------------------------------Message: ----------------------------------------------------------------------------
 
 //Constructors
@@ -1100,4 +1098,56 @@ void SyncRemoveSeeder::setIp(std::string ip)
 void SyncRemoveSeeder::setPort(std::string port)
 {
   this->port = port;
+}
+
+//------------------------------------------------------------Message: SyncSeederListRequest----------------------------------------------------------------------------
+
+//Constructors
+SyncSeederListRequest::SyncSeederListRequest()
+{
+}
+
+//Getters
+
+std::string SyncSeederListRequest::getType()
+{
+  return std::string("SyncSeederListRequest");
+}
+
+std::vector<char> SyncSeederListRequest::getBytes()
+{
+  return std::vector<char>();
+}
+
+//------------------------------------------------------------Message: SyncSeederListResponse----------------------------------------------------------------------------
+
+//Constructors
+SyncSeederListResponse::SyncSeederListResponse(std::vector<char> b)
+{
+  //hash
+  uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+  b.erase(b.begin(), b.begin() + 4);
+  this->bytes = std::vector<char>(&b[4], &b[4 + size]);
+}
+
+SyncSeederListResponse::SyncSeederListResponse()
+{
+}
+
+//Getters
+std::string SyncSeederListResponse::getType()
+{
+  return std::string("SyncSeederListResponse");
+}
+
+std::vector<char> SyncSeederListResponse::getBytes()
+{
+  //buffer
+  std::vector<char> buf;
+
+  //bytes
+  uint32_t size = this->bytes.size();
+  buf = uint32tonv(size);
+  buf.insert(buf.end(), this->bytes.begin(), this->bytes.end());
+  return buf;
 }

@@ -3,7 +3,8 @@
 #include "message.h"
 #include "trackerDatabase.h"
 #include <syslog.h>
-
+#include "logHandler.h"
+#include <fstream>
 using std::cout;
 using std::endl;
 
@@ -80,7 +81,7 @@ SeederInfoResponse TrackerMessageHandler::handleGetSeedsRequest(std::vector<char
         auto seeder_list = database.getSeederList(m->getHash());
         for (auto i : seeder_list)
         {
-            cout<< "handleGetSeedsRequest() adding seeder: " << i->getIp() << endl;
+            cout << "handleGetSeedsRequest() adding seeder: " << i->getIp() << endl;
             res.addSeeder(*i);
         }
         res.setStatus("SUCCESS");
@@ -88,8 +89,28 @@ SeederInfoResponse TrackerMessageHandler::handleGetSeedsRequest(std::vector<char
     }
     catch (...)
     {
-        res.addSeeder(Seeder("0.0.0.0","0"));
+        res.addSeeder(Seeder("0.0.0.0", "0"));
         res.setStatus("FAIL");
         return res;
     }
+}
+
+SyncSeederListResponse TrackerMessageHandler::handleSyncSeederRequest()
+{
+    LogHandler::getInstance().logMsg("Database: Reading seeder file");
+    std::string file_path = TrackerDatabase::getInstance().getSeederFilePath();
+    std::string line;
+    std::ifstream file(file_path);
+    std::vector<char> vec;
+    if (!file.eof() && !file.fail())
+    {
+        file.seekg(0, std::ios_base::end);
+        std::streampos fileSize = file.tellg();
+        vec.resize(fileSize);
+
+        file.seekg(0, std::ios_base::beg);
+        file.read(&vec[0], fileSize);
+    }
+    SyncSeederListResponse res(vec);
+    return res;
 }

@@ -67,7 +67,7 @@ std::vector<char> readBytes(int n, int sock_fd)
     return ebuf;
 }
 
-std::vector<std::string> extractArgs(std::string command)   
+std::vector<std::string> extractArgs(std::string command)
 {
     char *pch;
     std::vector<std::string> args;
@@ -89,9 +89,7 @@ int createTCPClient(Seeder client)
     char buffer[1024] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        printf("\n Socket creation error \n");
-        exit(2);
-        //return -1;
+        throw ErrorMsg("Socket creation error");
     }
     cout << "In create TCP connection, socket created...." << endl;
     memset(&serv_addr, '0', sizeof(serv_addr));
@@ -104,16 +102,12 @@ int createTCPClient(Seeder client)
     cout << "In create TCP connection, before itnet_pton...." << endl;
     if (inet_pton(AF_INET, client.getIp().c_str(), &serv_addr.sin_addr) <= 0)
     {
-        printf("\nInvalid address/ Address not supported \n");
-        exit(2);
-        //return -1;
+        throw ErrorMsg("Invalid address/ Address not supported");
     }
     cout << "In create TCP connection, set ip...." << endl;
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {
-        std::cout << "\nConnection to " << client.getIp() << ":" << client.getPort() << " failed" << endl;
-        exit(2);
-        //return -1;
+        throw ErrorMsg("Connection to " + client.getIp() + ":" + client.getPort() + " failed");
     }
     cout << "createTCPClient() Connected to Tracker with fd: " << sock << endl;
     return sock;
