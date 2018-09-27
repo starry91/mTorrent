@@ -30,6 +30,7 @@ void FileHandler::createMTorrent(mTorrent_Sptr torr)
         // }
         syslog(0, "Writing file to: [%s]", torr->getPath().c_str());
         myfile << torr->getHash() << "\n";
+        cout << "In mtorr constructor, filename: " << torr->getfileName() << endl;
         myfile << torr->getfileName() << "\n";
         myfile << torr->getFileSize() << "\n";
         myfile << ClientDatabase::getInstance().getTracker1().getIp() << "\n";
@@ -157,7 +158,7 @@ void FileHandler::createEmptyFile(std::string path, long size)
     //create empty file
     std::fstream outfile;
     outfile.open(path, std::ios::trunc | std::ios::out | std::ios::binary);
-    cout << "In Filehandler, Creating empty file, file path: "<< path << endl;
+    cout << "In Filehandler, Creating empty file, file path: " << path << endl;
     if (outfile.is_open())
     {
         std::cout << "In Filehandler, Creating empty file of size: " << size << std::endl;

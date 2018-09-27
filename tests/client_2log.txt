@@ -1,8 +1,0 @@
-Sun Sep 23 16:03:46 2018
-: Error - File does not exists
-Sun Sep 23 16:03:46 2018
-: File does not exists
-Sun Sep 23 16:03:56 2018
-: Request: share
-Sun Sep 23 16:03:56 2018
-: Response: SUCCESS

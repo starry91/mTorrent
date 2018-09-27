@@ -166,3 +166,22 @@ void TrackerDatabase::readSeederfile()
         }
     }
 }
+
+void TrackerDatabase::updateSeederfile()
+{
+    LogHandler::getInstance().logMsg("Database: Updating seeder file");
+    std::ofstream out(this->seeder_file_path, std::ofstream::trunc);
+    if (out.is_open())
+    {
+        for (auto i : this->files)
+        {
+            out << i.second->getFileName() << std::endl;
+            out << i.second->getHash() << std::endl;
+            for (auto seed : i.second->getSeeds())
+            {
+                out << seed->getIp() << ":" << seed->getPort() << std::endl;
+            }
+            out << std::endl;
+        }
+    }
+}

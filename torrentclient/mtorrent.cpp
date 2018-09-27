@@ -44,7 +44,7 @@ mTorrent::mTorrent(std::string path, std::string mTorr_path)
     this->path = path;
     this->mTorr_path = mTorr_path;
     this->hash = filehandler.getFileHash(path);
-    this->file_name = file_name;
+    this->file_name = filename;
     this->file_size = filehandler.fileSize(path);
     this->bit_chunks = std::vector<u_int32_t>(ceil((this->file_size * 1.0000) / CHUNK_SIZE), 1);
     std::cout << "In mtorr Class, " << this->bit_chunks.size() << std::endl;

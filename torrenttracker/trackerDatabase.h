@@ -36,6 +36,7 @@ public:
   Seeder getMainTracker();
   bool exists(std::string hash);
   void readSeederfile();
+  void updateSeederfile();
 };
 
 #endif

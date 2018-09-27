@@ -51,6 +51,7 @@ void Download::updateChunkStatus(int index, int val)
 void Download::incrementDownloadedChunks()
 {
     this->downloaded_chunks += 1;
+    std::cout << "Downloaded Percentage: " << (this->downloaded_chunks * 1.0000) / this->total_chunks << std::endl;
     if (this->downloaded_chunks == this->total_chunks)
     {
         this->downloadStatus = 1;

@@ -4,7 +4,7 @@
 #include "message.h"
 #include "commandHandler.h"
 #include <iomanip>
-
+#include "errorMsg.h"
 DownloadManager::DownloadManager() {}
 
 DownloadManager &DownloadManager::getInstance()
@@ -23,8 +23,12 @@ down_Sptr getFile(std::string hash)
 }
 void DownloadManager::updateFileChunkStatus(std::string hash, int index, int val)
 {
+    down_Sptr dptr;
+    if (this->dMap.find(hash) != this->dMap.end())
+        dptr = this->dMap[hash];
+    else
+        throw ErrorMsg("Cannot find chunk map in the download manager");
 
-    auto dptr = this->dMap[hash];
     dptr->updateChunkStatus(index, val);
     if (val == 1)
     {

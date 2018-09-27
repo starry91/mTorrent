@@ -6,7 +6,7 @@
 #include "encoder.h"
 #include "logHandler.h"
 #include "errorMsg.h"
-
+#include "trackerDatabase.h"
 using std::cout;
 using std::endl;
 
@@ -14,7 +14,7 @@ void RpcHandler::handleRpc(int client_fd)
 {
     try
     {
-        cout << "handleRpc() before while for fd: "<< client_fd << endl;
+        cout << "handleRpc() before while for fd: " << client_fd << endl;
         while (true)
         {
             NetworkReader reader(client_fd);
@@ -43,6 +43,10 @@ void RpcHandler::handleRpc(int client_fd)
                 std::cout << "hello1" << std::endl;
                 auto res = msgHandler.handleShareRequest(byte_data);
                 writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
+                if (res.getResponse() == "SUCCESS")
+                {
+                    TrackerDatabase::getInstance().updateSeederfile();
+                }
             }
             else if (request == "ADDSEEDER")
             {
@@ -51,6 +55,10 @@ void RpcHandler::handleRpc(int client_fd)
                 std::cout << "hello2" << std::endl;
                 auto res = msgHandler.handleAddSeederRequest(byte_data);
                 writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
+                if (res.getResponse() == "SUCCESS")
+                {
+                    TrackerDatabase::getInstance().updateSeederfile();
+                }
             }
             else if (request == "REMOVESEEDER")
             {
@@ -59,6 +67,10 @@ void RpcHandler::handleRpc(int client_fd)
                 std::cout << "hello3" << std::endl;
                 auto res = msgHandler.handleRemoveSeederRequest(byte_data);
                 writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
+                if (res.getResponse() == "SUCCESS")
+                {
+                    TrackerDatabase::getInstance().updateSeederfile();
+                }
             }
             else if (request == "SEEDERINFOREQUEST")
             {

@@ -50,13 +50,13 @@ std::vector<char> readBytes(int n, int sock_fd)
     //cout << "Called readBytes fd: " << sock_fd << ", n: " << n << endl;
     while (count < n)
     {
-       // cout << "before read: count: " << count << ", n: " << n << endl;
+        // cout << "before read: count: " << count << ", n: " << n << endl;
         int temp_count = read(sock_fd, buf, BUFSIZE > (n - count) ? n - count : BUFSIZE);
         //cout << "after read: tmp_count: " << temp_count << endl;
         if (temp_count <= 0)
         {
             //cout << "readBytes() connection closed, fd: " + std::to_string(sock_fd) << endl;
-            throw ErrorMsg("connection closed, fd: " + std::to_string(sock_fd));
+            throw ErrorMsg("connection  , fd: " + std::to_string(sock_fd));
         }
         for (int i = 0; i < temp_count; i++)
         {
@@ -67,7 +67,7 @@ std::vector<char> readBytes(int n, int sock_fd)
     return ebuf;
 }
 
-std::vector<std::string> extractArgs(std::string command)
+std::vector<std::string> extractArgs(std::string command)   
 {
     char *pch;
     std::vector<std::string> args;
@@ -107,7 +107,7 @@ int createTCPClient(Seeder client)
     }
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {
-        printf("\nConnection Failed \n");
+        std::cout << "\nConnection to " << client.getIp() << ":" << client.getPort() << " failed" << endl;
         exit(2);
         //return -1;
     }
