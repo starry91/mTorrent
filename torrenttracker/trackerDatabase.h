@@ -34,6 +34,7 @@ public:
   void remove_seeder(std::string hash, seeder_Sptr seeder);
   std::vector<seeder_Sptr> getSeederList(std::string hash);
   Seeder getMainTracker();
+  Seeder getSecondayTracker();
   bool exists(std::string hash);
   void readSeederfile();
   void updateSeederfile();

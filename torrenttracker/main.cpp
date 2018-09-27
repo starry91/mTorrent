@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 
     TrackerDatabase::getInstance().setLogPath(std::string(argv[4]));
     TrackerDatabase::getInstance().setMainTracker(tracker1);
+    TrackerDatabase::getInstance().setSecondaryTracker(tracker2);
     TrackerDatabase::getInstance().setSeederFilePath(std::string(argv[3]));
     TrackerDatabase::getInstance().readSeederfile();
 

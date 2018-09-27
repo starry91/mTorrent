@@ -7,6 +7,8 @@
 #include "logHandler.h"
 #include "errorMsg.h"
 #include "trackerDatabase.h"
+#include "TrackerServiceServer.h"
+
 using std::cout;
 using std::endl;
 
@@ -46,6 +48,23 @@ void RpcHandler::handleRpc(int client_fd)
                 if (res.getResponse() == "SUCCESS")
                 {
                     TrackerDatabase::getInstance().updateSeederfile();
+                    SyncShare sync_msg(byte_data);
+                    TrackerServiceServer tracker2handler(TrackerDatabase::getInstance().getSecondayTracker());
+                    cout << "Update to secondary Tracker after connection: " << endl;
+                    auto res = tracker2handler.syncshareFile(sync_msg);
+                    cout << "Update to secondary Tracker: " << res.getResponse() << endl;
+                }
+            }
+            else if (request == "SYNCSHARE")
+            {
+                std::cout << "Recieved share request" << std::endl;
+                LogHandler::getInstance().logMsg("Recieved share request");
+                std::cout << "hello1" << std::endl;
+                auto res = msgHandler.handleShareRequest(byte_data);
+                writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
+                if (res.getResponse() == "SUCCESS")
+                {
+                    TrackerDatabase::getInstance().updateSeederfile();
                 }
             }
             else if (request == "ADDSEEDER")
@@ -58,9 +77,43 @@ void RpcHandler::handleRpc(int client_fd)
                 if (res.getResponse() == "SUCCESS")
                 {
                     TrackerDatabase::getInstance().updateSeederfile();
+                    SyncAddSeeder sync_msg(byte_data);
+                    TrackerServiceServer tracker2handler(TrackerDatabase::getInstance().getSecondayTracker());
+                    cout << "Update to secondary Tracker after connection: " << endl;
+                    auto res = tracker2handler.syncaddSeederRequest(sync_msg);
+                    cout << "Update to secondary Tracker: " << res.getResponse() << endl;
+                }
+            }
+            else if (request == "SYNCADDSEEDER")
+            {
+                std::cout << "Recieved AddSeeder request" << std::endl;
+                LogHandler::getInstance().logMsg("Recieved AddSeeder request");
+                std::cout << "hello2" << std::endl;
+                auto res = msgHandler.handleAddSeederRequest(byte_data);
+                writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
+                if (res.getResponse() == "SUCCESS")
+                {
+                    TrackerDatabase::getInstance().updateSeederfile();
                 }
             }
             else if (request == "REMOVESEEDER")
+            {
+                std::cout << "Recieved Remove Seeder request" << std::endl;
+                LogHandler::getInstance().logMsg("Recieved Remove Seeder request");
+                std::cout << "hello3" << std::endl;
+                auto res = msgHandler.handleRemoveSeederRequest(byte_data);
+                writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
+                if (res.getResponse() == "SUCCESS")
+                {
+                    TrackerDatabase::getInstance().updateSeederfile();
+                    SyncRemoveSeeder sync_msg(byte_data);
+                    TrackerServiceServer tracker2handler(TrackerDatabase::getInstance().getSecondayTracker());
+                    cout << "Update to secondary Tracker after connection: " << endl;
+                    auto res = tracker2handler.syncremoveSeederRequest(sync_msg);
+                    cout << "Update to secondary Tracker: " << res.getResponse() << endl;
+                }
+            }
+            else if (request == "SYNCREMOVESEEDER")
             {
                 std::cout << "Recieved Remove Seeder request" << std::endl;
                 LogHandler::getInstance().logMsg("Recieved Remove Seeder request");

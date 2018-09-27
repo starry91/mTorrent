@@ -805,3 +805,299 @@ void Response::setResponse(std::string response)
 {
   this->response = response;
 }
+
+
+
+//------------------------------------------------------------Message: ----------------------------------------------------------------------------
+
+//Constructors
+SyncShare::SyncShare(std::vector<char> b)
+{
+  {
+    uint32_t name_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    this->file_name = std::string(&b[4], &b[4 + name_size]);
+    b.erase(b.begin(), b.begin() + 4 + name_size);
+  }
+  {
+    uint32_t hash_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    this->hash = std::string(&b[4], &b[4 + hash_size]);
+    b.erase(b.begin(), b.begin() + 4 + hash_size);
+  }
+  {
+    uint32_t ip_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    // std::cout << "hsize: " << hash_size << std::endl;
+    this->ip = std::string(&b[4], &b[4 + ip_size]);
+    b.erase(b.begin(), b.begin() + 4 + ip_size);
+  }
+  {
+    uint32_t port_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    // std::cout << "hsize: " << hash_size << std::endl;
+    this->port = std::string(&b[4], &b[4 + port_size]);
+    b.erase(b.begin(), b.begin() + 4 + port_size);
+  }
+}
+
+SyncShare::SyncShare()
+{
+}
+
+//Getters
+std::string SyncShare::getFileName()
+{
+  return this->file_name;
+}
+
+std::string SyncShare::getHash()
+{
+  return this->hash;
+}
+std::string SyncShare::getIp()
+{
+  return this->ip;
+}
+std::string SyncShare::getPort()
+{
+  return this->port;
+}
+
+std::string SyncShare::getType()
+{
+  return std::string("SyncShare");
+}
+
+std::vector<char> SyncShare::getBytes()
+{
+  std::vector<char> buf;
+  uint32_t size = this->file_name.size();
+  buf = uint32tonv(size);
+  for (auto i : this->file_name)
+  {
+    buf.push_back(i);
+  }
+
+  {
+    auto tmp = uint32tonv(this->hash.size());
+    buf.insert(buf.end(), tmp.begin(), tmp.end());
+    for (auto i : this->hash)
+    {
+      buf.push_back(i);
+    }
+  }
+
+  {
+    auto tmp = uint32tonv(this->ip.size());
+    buf.insert(buf.end(), tmp.begin(), tmp.end());
+    for (auto i : this->ip)
+    {
+      buf.push_back(i);
+    }
+  }
+
+  auto tmp = uint32tonv(this->port.size());
+  buf.insert(buf.end(), tmp.begin(), tmp.end());
+  for (auto i : this->port)
+  {
+    buf.push_back(i);
+  }
+
+  return buf;
+}
+
+//setters
+void SyncShare::setFileName(std::string file_name)
+{
+  this->file_name = file_name;
+}
+
+void SyncShare::setHash(std::string hash)
+{
+  this->hash = hash;
+}
+void SyncShare::setIp(std::string ip)
+{
+  this->ip = ip;
+}
+void SyncShare::setPort(std::string port)
+{
+  this->port = port;
+}
+
+//------------------------------------------------------------Message: SyncAddSeeder----------------------------------------------------------------------------
+
+//Constructors
+SyncAddSeeder::SyncAddSeeder(std::vector<char> b)
+{
+  {
+    uint32_t hash_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    this->hash = std::string(&b[4], &b[4 + hash_size]);
+    b.erase(b.begin(), b.begin() + 4 + hash_size);
+  }
+  {
+    uint32_t ip_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    // std::cout << "hsize: " << hash_size << std::endl;
+    this->ip = std::string(&b[4], &b[4 + ip_size]);
+    b.erase(b.begin(), b.begin() + 4 + ip_size);
+  }
+  {
+    uint32_t port_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    // std::cout << "hsize: " << hash_size << std::endl;
+    this->port = std::string(&b[4], &b[4 + port_size]);
+    b.erase(b.begin(), b.begin() + 4 + port_size);
+  }
+}
+
+SyncAddSeeder::SyncAddSeeder()
+{
+}
+
+//Getters
+std::string SyncAddSeeder::getHash()
+{
+  return this->hash;
+}
+std::string SyncAddSeeder::getIp()
+{
+  return this->ip;
+}
+std::string SyncAddSeeder::getPort()
+{
+  return this->port;
+}
+
+std::string SyncAddSeeder::getType()
+{
+  return std::string("SyncAddSeeder");
+}
+
+std::vector<char> SyncAddSeeder::getBytes()
+{
+  std::vector<char> buf;
+  uint32_t size = this->hash.size();
+  buf = uint32tonv(size);
+  for (auto i : this->hash)
+  {
+    buf.push_back(i);
+  }
+
+  {
+    auto tmp = uint32tonv(this->ip.size());
+    buf.insert(buf.end(), tmp.begin(), tmp.end());
+    for (auto i : this->ip)
+    {
+      buf.push_back(i);
+    }
+  }
+
+  auto tmp = uint32tonv(this->port.size());
+  buf.insert(buf.end(), tmp.begin(), tmp.end());
+  for (auto i : this->port)
+  {
+    buf.push_back(i);
+  }
+
+  return buf;
+}
+
+//Setters
+void SyncAddSeeder::setHash(std::string hash)
+{
+  this->hash = hash;
+}
+void SyncAddSeeder::setIp(std::string ip)
+{
+  this->ip = ip;
+}
+void SyncAddSeeder::setPort(std::string port)
+{
+  this->port = port;
+}
+
+//------------------------------------------------------------Message: SyncRemoveSeeder----------------------------------------------------------------------------
+
+//Constructors
+SyncRemoveSeeder::SyncRemoveSeeder(std::vector<char> b)
+{
+  {
+    uint32_t hash_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    this->hash = std::string(&b[4], &b[4 + hash_size]);
+    b.erase(b.begin(), b.begin() + 4 + hash_size);
+  }
+  {
+    uint32_t ip_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    // std::cout << "hsize: " << hash_size << std::endl;
+    this->ip = std::string(&b[4], &b[4 + ip_size]);
+    b.erase(b.begin(), b.begin() + 4 + ip_size);
+  }
+  {
+    uint32_t port_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
+    // std::cout << "hsize: " << hash_size << std::endl;
+    this->port = std::string(&b[4], &b[4 + port_size]);
+    b.erase(b.begin(), b.begin() + 4 + port_size);
+  }
+}
+
+SyncRemoveSeeder::SyncRemoveSeeder()
+{
+}
+
+//Getters
+std::string SyncRemoveSeeder::getHash()
+{
+  return this->hash;
+}
+std::string SyncRemoveSeeder::getIp()
+{
+  return this->ip;
+}
+std::string SyncRemoveSeeder::getPort()
+{
+  return this->port;
+}
+
+std::string SyncRemoveSeeder::getType()
+{
+  return std::string("SyncRemoveSeeder");
+}
+
+std::vector<char> SyncRemoveSeeder::getBytes()
+{
+  std::vector<char> buf;
+  uint32_t size = this->hash.size();
+  buf = uint32tonv(size);
+  for (auto i : this->hash)
+  {
+    buf.push_back(i);
+  }
+
+  {
+    auto tmp = uint32tonv(this->ip.size());
+    buf.insert(buf.end(), tmp.begin(), tmp.end());
+    for (auto i : this->ip)
+    {
+      buf.push_back(i);
+    }
+  }
+
+  auto tmp = uint32tonv(this->port.size());
+  buf.insert(buf.end(), tmp.begin(), tmp.end());
+  for (auto i : this->port)
+  {
+    buf.push_back(i);
+  }
+
+  return buf;
+}
+
+//Setters
+void SyncRemoveSeeder::setHash(std::string hash)
+{
+  this->hash = hash;
+}
+void SyncRemoveSeeder::setIp(std::string ip)
+{
+  this->ip = ip;
+}
+void SyncRemoveSeeder::setPort(std::string port)
+{
+  this->port = port;
+}

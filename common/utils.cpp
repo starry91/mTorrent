@@ -82,7 +82,7 @@ std::vector<std::string> extractArgs(std::string command)
 
 int createTCPClient(Seeder client)
 {
-    syslog(0, "Connecting to Tracker....");
+    cout << "In create TCP connection, Connecting to Tracker...." << endl;
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
@@ -93,18 +93,22 @@ int createTCPClient(Seeder client)
         exit(2);
         //return -1;
     }
+    cout << "In create TCP connection, socket created...." << endl;
     memset(&serv_addr, '0', sizeof(serv_addr));
 
     serv_addr.sin_family = AF_INET;
+    cout << "In create TCP connection, port: " << client.getPort() << endl;
     serv_addr.sin_port = htons(std::stoi(client.getPort()));
 
     // Convert IPv4 and IPv6 addresses from text to binary form
+    cout << "In create TCP connection, before itnet_pton...." << endl;
     if (inet_pton(AF_INET, client.getIp().c_str(), &serv_addr.sin_addr) <= 0)
     {
         printf("\nInvalid address/ Address not supported \n");
         exit(2);
         //return -1;
     }
+    cout << "In create TCP connection, set ip...." << endl;
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {
         std::cout << "\nConnection to " << client.getIp() << ":" << client.getPort() << " failed" << endl;

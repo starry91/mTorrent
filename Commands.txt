@@ -1,6 +1,8 @@
 Tracker commands:
 ./torrenttracker/ttracker 127.0.0.1:9090 127.0.0.1:8787 ./tests/seed_list.txt ./tests/tracker_log.txt
 
+./torrenttracker/ttracker 127.0.0.1:8787 127.0.0.1:9090 ./tests/seed_list1.txt ./tests/tracker_log1.txt
+
 Client commands:
 C1
 ./torrentclient/tclient 127.0.0.1:9559 127.0.0.1:9090 127.0.0.1:8787 ./tests/client_log.txt
@@ -14,7 +16,7 @@ C5
 ./torrentclient/tclient 127.0.0.1:9604 127.0.0.1:9090 127.0.0.1:8787 ./tests/client_log.txt
 C6
 ./torrentclient/tclient 127.0.0.1:9605 127.0.0.1:9090 127.0.0.1:8787 ./tests/client_log.txt
-
+	
 share:
 share ./tests/hash_test_2.png ./tests/test1.mtorr
 share ./tests/vol1sep.pdf ./tests/vol1sep.mtorr
@@ -26,4 +28,4 @@ download ./tests/vol1sep.mtorr ./tests/peer_downloads/
 download ./tests/pic1.mtorr ./tests/peer_downloads/
 
 remove:
-remove ./tests/test1.mtorr ./tests/peer_downloads/
+remove ./tests/test1.mtorr

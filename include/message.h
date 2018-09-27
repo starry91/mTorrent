@@ -204,4 +204,70 @@ public:
   virtual std::vector<char> getBytes();
 };
 
+
+
+//------------------------------------------------------------Message: SyncShare----------------------------------------------------------------------------
+class SyncShare : public Message
+{
+  std::string file_name;
+  std::string hash;
+  std::string ip;
+  std::string port;
+
+public:
+  std::string getHash();
+  std::string getIp();
+  std::string getPort();
+  std::string getFileName();
+  SyncShare(std::vector<char>);
+  SyncShare();
+  void setHash(std::string);
+  void setIp(std::string);
+  void setPort(std::string);
+  void setFileName(std::string);
+  virtual std::string getType();
+  virtual std::vector<char> getBytes();
+};
+
+//------------------------------------------------------------Message: SyncAddSeeder----------------------------------------------------------------------------
+class SyncAddSeeder : public Message
+{
+  std::string hash;
+  std::string ip;
+  std::string port;
+
+public:
+  std::string getHash();
+  std::string getIp();
+  std::string getPort();
+  SyncAddSeeder(std::vector<char>);
+  SyncAddSeeder();
+  void setHash(std::string);
+  void setIp(std::string);
+  void setPort(std::string);
+  virtual std::string getType();
+  virtual std::vector<char> getBytes();
+};
+
+//------------------------------------------------------------Message: SyncRemoveSeeder----------------------------------------------------------------------------
+class SyncRemoveSeeder : public Message
+{
+  std::string hash;
+  std::string ip;
+  std::string port;
+
+public:
+  std::string getHash();
+  std::string getIp();
+  std::string getPort();
+  SyncRemoveSeeder(std::vector<char>);
+  SyncRemoveSeeder();
+  void setHash(std::string);
+  void setIp(std::string);
+  void setPort(std::string);
+  virtual std::string getType();
+  virtual std::vector<char> getBytes();
+};
+
+
 #endif

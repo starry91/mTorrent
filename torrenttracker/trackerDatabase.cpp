@@ -115,6 +115,11 @@ Seeder TrackerDatabase::getMainTracker()
     return this->tracker1;
 }
 
+Seeder TrackerDatabase::getSecondayTracker()
+{
+    return this->tracker2;
+}
+
 void TrackerDatabase::readSeederfile()
 {
     LogHandler::getInstance().logMsg("Database: Reading seeder file");

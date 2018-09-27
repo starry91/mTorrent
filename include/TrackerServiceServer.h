@@ -20,6 +20,9 @@ public:
   Response shareFile(Share msg);
   Response addSeederRequest(AddSeeder msg);
   Response removeSeederRequest(RemoveSeeder msg);
+  Response syncshareFile(SyncShare msg);
+  Response syncaddSeederRequest(SyncAddSeeder msg);
+  Response syncremoveSeederRequest(SyncRemoveSeeder msg);
   ChunkInfoResponse getChunkInfo(ChunkInfoRequest req);
   SendChunkResponse getChunk(SendChunkRequest req);
   SeederInfoResponse getSeederInfo(SeederInfoRequest msg);
