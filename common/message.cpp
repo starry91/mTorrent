@@ -1127,7 +1127,7 @@ SyncSeederListResponse::SyncSeederListResponse(std::vector<char> b)
   //hash
   uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   b.erase(b.begin(), b.begin() + 4);
-  this->bytes = std::vector<char>(&b[4], &b[4 + size]);
+  this->bytes = b;
 }
 
 SyncSeederListResponse::SyncSeederListResponse()
@@ -1150,4 +1150,9 @@ std::vector<char> SyncSeederListResponse::getBytes()
   buf = uint32tonv(size);
   buf.insert(buf.end(), this->bytes.begin(), this->bytes.end());
   return buf;
+}
+
+void SyncSeederListResponse::setBytes(std::vector<char> data)
+{
+  this->bytes = data;
 }

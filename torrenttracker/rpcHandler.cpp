@@ -27,13 +27,13 @@ void RpcHandler::handleRpc(int client_fd)
             auto rpcbytepair = decoder.decodeMsgType(byte_data);
             auto request = rpcbytepair.first;
             byte_data = rpcbytepair.second;
-            if (byte_data.size() == 0)
-            {
-                NetworkWriter writer(client_fd);
-                Response res;
-                res.setResponse("FAIL: Corrupted Data");
-                writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
-            }
+            // if (request != "SYNCSEEDERLISTREQUEST" && byte_data.size() == 0)
+            // {
+            //     NetworkWriter writer(client_fd);
+            //     Response res;
+            //     res.setResponse("FAIL: Corrupted Data");
+            //     writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
+            // }
             //std::string request = msg->getType();
             TrackerMessageHandler msgHandler;
             NetworkWriter writer(client_fd);
@@ -140,6 +140,7 @@ void RpcHandler::handleRpc(int client_fd)
                 std::cout << "Recieved Sync Seeder Info request" << std::endl;
                 LogHandler::getInstance().logMsg("Recieved SeederInfoRequest request");
                 auto res = msgHandler.handleSyncSeederRequest();
+                std::cout << "Main tracker, msg size: " << res.getBytes().size() << std::endl;
                 //std::cout << "handleRpc() in SEEDERINFOREQUEST after handleGetSeedsRequest" << std::endl;
                 writer.writeToNetwork(encoder.encode(std::string("SYNCSEEDERLISTRESPONSE"), res.getBytes()));
                 //std::cout << "handleRpc() in SEEDERINFOREQUEST after writing handleGetSeedsRequest" << std::endl;

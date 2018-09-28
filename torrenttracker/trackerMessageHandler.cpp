@@ -100,17 +100,29 @@ SyncSeederListResponse TrackerMessageHandler::handleSyncSeederRequest()
     LogHandler::getInstance().logMsg("Database: Reading seeder file");
     std::string file_path = TrackerDatabase::getInstance().getSeederFilePath();
     std::string line;
-    std::ifstream file(file_path);
-    std::vector<char> vec;
-    if (!file.eof() && !file.fail())
-    {
-        file.seekg(0, std::ios_base::end);
-        std::streampos fileSize = file.tellg();
-        vec.resize(fileSize);
+    std::cout << "FilePath: " << file_path << std::endl;
+    std::ifstream file(file_path, std::ios::binary);
+    // std::vector<char> vec;
+    // if (!file.eof() && !file.fail())
+    // {
+    //     file.seekg(0, std::ios_base::end);
+    //     std::streampos fileSize = file.tellg();
+    //     vec.resize(fileSize);
 
-        file.seekg(0, std::ios_base::beg);
-        file.read(&vec[0], fileSize);
+    //     file.seekg(0, std::ios_base::beg);
+    //     file.read(&vec[0], fileSize);
+    // }
+    if (file.fail())
+        throw 0;
+    std::vector<char> const vec(
+        (std::istreambuf_iterator<char>(file)),
+        (std::istreambuf_iterator<char>()));
+    std::cout << vec.size() << " bytes." << std::endl;
+    SyncSeederListResponse res;
+    std::cout << "In Tr Message handler, Handle sync request: " << vec.size() << std::endl;
+    res.setBytes(vec);
+    for(auto i : vec) {
+        std::cout << i;
     }
-    SyncSeederListResponse res(vec);
     return res;
 }

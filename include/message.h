@@ -286,6 +286,7 @@ public:
   SyncSeederListResponse();
   virtual std::string getType();
   virtual std::vector<char> getBytes();
+  void setBytes(std::vector<char> data);
 };
 
 #endif

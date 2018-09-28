@@ -203,12 +203,20 @@ SyncSeederListResponse TrackerServiceServer::syncSeederFile(SyncSeederListReques
 {
     Encoder encoder;
     auto b = encoder.encode("SYNCSEEDERLISTREQUEST", msg.getBytes());
+    std::cout << "sending " << b.size() << " bytes" << std::endl;
     NetworkWriter writer(this->tracker_fd);
     writer.writeToNetwork(b);
 
     NetworkReader reader(this->tracker_fd);
     auto response_b = reader.readFromNetwork();
+   // response_b = reader.readFromNetwork();
+    std::cout << "In Tracker Respone for sync, resp size: " << response_b.size() << std::endl;
     Decoder decoder;
     auto msg_pair = decoder.decodeMsgType(response_b);
+    std::cout << "In Tracker Respone for sync, actual msg size: " << msg_pair.second.size() << std::endl;
+    for (auto i : msg_pair.second)
+    {
+        std::cout << i;
+    }
     return SyncSeederListResponse(msg_pair.second);
 }

@@ -1,12 +1,4 @@
-Thu Sep 27 16:48:40 2018
-: Request: share
-Thu Sep 27 16:48:40 2018
-: Response: SUCCESS
-Thu Sep 27 16:50:17 2018
-: Request: share
-Thu Sep 27 16:50:17 2018
-: Response: SUCCESS
-Thu Sep 27 16:55:12 2018
-: Request: share
-Thu Sep 27 16:55:12 2018
-: Response: SUCCESS
+Fri Sep 28 10:38:13 2018
+: Error - connection  , fd: 7
+Fri Sep 28 10:38:13 2018
+: connection  , fd: 7
