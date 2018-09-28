@@ -205,10 +205,9 @@ void TrackerDatabase::syncSeederFile()
         std::cout << "handleCommand() sending msg" << std::endl;
         TrackerServiceServer trackerCommunicator(TrackerDatabase::getInstance().getSecondayTracker());
         SyncSeederListRequest msg;
-        std::cout << "Main tracker, msg size: " << msg.getBytes().size() << std::endl;
         auto res = trackerCommunicator.syncSeederFile(msg);
 
-        this->writeToSeederfile(res.getBytes());
+        this->writeToSeederfile(res.getData());
         //this->printResponse(msg.getType(), res);
         std::cout << "handleCommand() Got reponse" << std::endl;
     }
@@ -220,7 +219,7 @@ void TrackerDatabase::syncSeederFile()
 void TrackerDatabase::writeToSeederfile(std::vector<char> bytes)
 {
     LogHandler::getInstance().logMsg("Database: Updating seeder file");
-    std::ofstream out(this->seeder_file_path, std::ofstream::trunc | std::ios::binary);
+    std::ofstream out(this->seeder_file_path, std::ios::binary);
     if (out.is_open())
     {
         out.write(bytes.data(), bytes.size());

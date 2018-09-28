@@ -1124,10 +1124,20 @@ std::vector<char> SyncSeederListRequest::getBytes()
 //Constructors
 SyncSeederListResponse::SyncSeederListResponse(std::vector<char> b)
 {
+  std::cout << "In SyncSeederlist constructor, begenning" << std::endl;
+  for (auto i : b)
+  {
+    std::cout << i;
+  }
   //hash
   uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   b.erase(b.begin(), b.begin() + 4);
   this->bytes = b;
+  std::cout << "In SyncSeederlist constructor, after" << std::endl;
+  for (auto i : b)
+  {
+    std::cout << i;
+  }
 }
 
 SyncSeederListResponse::SyncSeederListResponse()
@@ -1155,4 +1165,9 @@ std::vector<char> SyncSeederListResponse::getBytes()
 void SyncSeederListResponse::setBytes(std::vector<char> data)
 {
   this->bytes = data;
+}
+
+std::vector<char> SyncSeederListResponse::getData()
+{
+  return this->bytes;
 }
