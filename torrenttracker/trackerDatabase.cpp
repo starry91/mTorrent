@@ -66,7 +66,7 @@ void TrackerDatabase::addSeeder(std::string hash, seeder_Sptr seeder)
     }
     else
     {
-        std::cout << "fail2" << std::endl;
+        //std::cout << "fail2" << std::endl;
         LogHandler::getInstance().logError("Database: No hash found for add seeder request for: " + hash);
         throw std::string("No hash found");
     }
@@ -202,14 +202,14 @@ void TrackerDatabase::syncSeederFile()
 {
     try
     {
-        std::cout << "handleCommand() sending msg" << std::endl;
+       // std::cout << "handleCommand() sending msg" << std::endl;
         TrackerServiceServer trackerCommunicator(TrackerDatabase::getInstance().getSecondayTracker());
         SyncSeederListRequest msg;
         auto res = trackerCommunicator.syncSeederFile(msg);
 
         this->writeToSeederfile(res.getData());
         //this->printResponse(msg.getType(), res);
-        std::cout << "handleCommand() Got reponse" << std::endl;
+       //std::cout << "handleCommand() Got reponse" << std::endl;
     }
     catch (ErrorMsg e)
     {

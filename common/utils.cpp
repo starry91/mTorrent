@@ -11,7 +11,7 @@
 #include "seeder.h"
 #include "errorMsg.h"
 #include "openssl/sha.h"
-
+#include <errno.h>
 using std::cout;
 using std::endl;
 
@@ -47,7 +47,7 @@ std::vector<char> readBytes(int n, int sock_fd)
     char buf[BUFSIZE];
     int count = 0;
     std::vector<char> ebuf;
-    //cout << "Called readBytes fd: " << sock_fd << ", n: " << n << endl;
+    // syslog(0, "Called readBytes fd: %d, n: %d", sock_fd, n);
     while (count < n)
     {
         // cout << "before read: count: " << count << ", n: " << n << endl;
@@ -55,7 +55,7 @@ std::vector<char> readBytes(int n, int sock_fd)
         //cout << "after read: tmp_count: " << temp_count << endl;
         if (temp_count <= 0)
         {
-            //cout << "readBytes() connection closed, fd: " + std::to_string(sock_fd) << endl;
+            syslog(LOG_WARNING, "readBytes() connection closed, fd: %d, temp: %d, err: %s", sock_fd, temp_count, strerror(errno));
             throw ErrorMsg("connection  , fd: " + std::to_string(sock_fd));
         }
         for (int i = 0; i < temp_count; i++)
@@ -82,7 +82,7 @@ std::vector<std::string> extractArgs(std::string command)
 
 int createTCPClient(Seeder client)
 {
-    cout << "In create TCP connection, Connecting to Tracker...." << endl;
+    //cout << "In create TCP connection, Connecting to Tracker...." << endl;
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
@@ -91,25 +91,27 @@ int createTCPClient(Seeder client)
     {
         throw ErrorMsg("Socket creation error");
     }
-    cout << "In create TCP connection, socket created...." << endl;
-    memset(&serv_addr, '0', sizeof(serv_addr));
+    //cout << "In create TCP connection, socket created...." << endl;
+    memset(&serv_addr, 0, sizeof(serv_addr));
 
     serv_addr.sin_family = AF_INET;
-    cout << "In create TCP connection, port: " << client.getPort() << endl;
+    // syslog(0, "In create TCP connection, Host: %s, port: %s", client.getIp().c_str(), client.getPort().c_str());
     serv_addr.sin_port = htons(std::stoi(client.getPort()));
 
     // Convert IPv4 and IPv6 addresses from text to binary form
-    cout << "In create TCP connection, before itnet_pton...." << endl;
+    ///cout << "In create TCP connection, before itnet_pton...." << endl;
     if (inet_pton(AF_INET, client.getIp().c_str(), &serv_addr.sin_addr) <= 0)
     {
+        close(sock);
         throw ErrorMsg("Invalid address/ Address not supported");
     }
-    cout << "In create TCP connection, set ip...." << endl;
+    //cout << "In create TCP connection, set ip...." << endl;
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
     {
+        close(sock);
         throw ErrorMsg("Connection to " + client.getIp() + ":" + client.getPort() + " failed");
     }
-    cout << "createTCPClient() Connected to Tracker with fd: " << sock << endl;
+    //cout << "createTCPClient() Connected to Tracker with fd: " << sock << endl;
     return sock;
 }
 

@@ -33,7 +33,7 @@ std::string Download::getHash()
 
 std::string Download::getFileName()
 {
-    std::cout << "In Download class, getFileName|| [" << this->file_name << "]" << std::endl;
+    //std::cout << "In Download class, getFileName|| [" << this->file_name << "]" << std::endl;
     return this->file_name;
 }
 
@@ -44,14 +44,14 @@ int Download::getTotalChunks()
 
 void Download::updateChunkStatus(int index, int val)
 {
-    std::cout << "In Download class,updateChunkStatus|| Chunk Map size: " << this->chunk_map.size() << std::endl;
+    //std::cout << "In Download class,updateChunkStatus|| Chunk Map size: " << this->chunk_map.size() << std::endl;
     this->chunk_map[index] = val;
 }
 
 void Download::incrementDownloadedChunks()
 {
     this->downloaded_chunks += 1;
-    std::cout << "Downloaded Percentage: " << (this->downloaded_chunks * 1.0000) / this->total_chunks << std::endl;
+    //std::cout << "Downloaded Percentage: " << (this->downloaded_chunks * 1.0000) / this->total_chunks << std::endl;
     if (this->downloaded_chunks == this->total_chunks)
     {
         this->downloadStatus = 1;
@@ -61,4 +61,9 @@ void Download::incrementDownloadedChunks()
 int Download::getStatus()
 {
     return this->downloadStatus;
+}
+
+int Download::getDownloadedChunks()
+{
+    return this->downloaded_chunks;
 }

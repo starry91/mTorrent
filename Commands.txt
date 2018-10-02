@@ -21,11 +21,15 @@ share:
 share ./tests/hash_test_2.png ./tests/test1.mtorr
 share ./tests/vol1sep.pdf ./tests/vol1sep.mtorr
 share ./tests/pic1.JPG ./tests/pic1.mtorr
+share ./tests/memtest86-usb.img ./tests/memtest86-usb.mtorr
+share ./tests/vid1.mp4 ./tests/vid1.mtorr
 
 download:
 download ./tests/test1.mtorr ./tests/peer_downloads/
 download ./tests/vol1sep.mtorr ./tests/peer_downloads/
 download ./tests/pic1.mtorr ./tests/peer_downloads/
+download ./tests/memtest86-usb.mtorr ./tests/peer_downloads/
+download ./tests/vid1.mtorr ./tests/peer_downloads/
 
 remove:
 remove ./tests/test1.mtorr

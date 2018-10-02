@@ -15,7 +15,9 @@
 #include "download.h"
 #include "downloadManager.h"
 #include <chrono>
+#include "utils.h"
 #include <thread>
+#include "chunkDownloader.h"
 using std::cout;
 using std::endl;
 
@@ -26,7 +28,7 @@ void CommandHandler::handleCommand(std::string command)
         std::vector<std::string> args = extractArgs(command);
         if (args[0] == "share" && args.size() == 3)
         {
-            cout << "In share" << endl;
+            //cout << "In share" << endl;
             FileHandler filehandler;
             auto mtorr = std::make_shared<mTorrent>(args[1], args[2]);
             filehandler.createMTorrent(mtorr);
@@ -44,11 +46,11 @@ void CommandHandler::handleCommand(std::string command)
             //calling rpc
             try
             {
-                std::cout << "handleCommand() sending msg" << std::endl;
+                //std::cout << "handleCommand() sending msg" << std::endl;
                 TrackerServiceServer trackerCommunicator(ClientDatabase::getInstance().getTracker1(), ClientDatabase::getInstance().getTracker2());
                 Response res = trackerCommunicator.shareFile(msg);
                 this->printResponse(msg.getType(), res);
-                std::cout << "handleCommand() Got reponse" << std::endl;
+                //std::cout << "handleCommand() Got reponse" << std::endl;
             }
             catch (std::exception e)
             {
@@ -61,7 +63,7 @@ void CommandHandler::handleCommand(std::string command)
         {
             FileHandler fhandler;
             auto mtorrPtr = fhandler.readMTorrent(args[1]);
-            cout << "Int download, after reading mTorrent: " << mtorrPtr->getfileName() << endl;
+            //cout << "Int download, after reading mTorrent: " << mtorrPtr->getfileName() << endl;
             // std::cout << "CommandHandler::handleCommand() read Mtorr" << std::endl;
 
             // std::cout << "CommandHandler::handleCommand() Mtorr hash: " << mtorrPtr->getHash() << std::endl;
@@ -89,11 +91,14 @@ void CommandHandler::handleCommand(std::string command)
                         ChunkInfoRequest req;
                         req.setHash(mtorrPtr->getHash());
                         auto resp = seeder.getChunkInfo(req);
-                        cout << "Chunk info response: " << resp.getHash() << endl;
+                        //cout << "Chunk info response: " << resp.getHash() << endl;
                         for (int i = 0; i < resp.getChunkInfo().size(); i++)
                         {
-                            cout << "Chunk " << i << ", value: " << resp.getChunkInfo()[i] << endl;
-                            if (resp.getChunkInfo()[i] == 1)
+                            //cout << "Chunk " << i << ", value: " << resp.getChunkInfo()[i] << endl;
+                            if (resp.getChunkInfo()[i] == 1
+                            && (s.getIp() != ClientDatabase::getInstance().getHost().getPort()
+                                || s.getPort() != ClientDatabase::getInstance().getHost().getPort())
+                            )
                             {
                                 chunk_source[i].push_back(s);
                             }
@@ -105,26 +110,31 @@ void CommandHandler::handleCommand(std::string command)
                     // auto filename = mtorrPtr->getfileName().substr(mtorrPtr->getfileName().find_last_of("/") + 1);
                     // auto destfilepath = args[2] + "/" + filename;
                     auto destfilepath = args[2] + "/" + mtorrPtr->getfileName();
-                    cout << "In downoad, destfilepath: " << destfilepath << endl;
+                    // cout << "In downoad, destfilepath: " << destfilepath << endl;
                     fhandler.createEmptyFile(destfilepath, mtorrPtr->getFileSize());
 
-                    cout << "Int download, after creating empty file: " << destfilepath << endl;
+                    // cout << "Int download, after creating empty file: " << destfilepath << endl;
                     //cout << "CommandHandler::handleCommand() File name:    " << mtorrPtr->getfileName() << endl;
 
                     //std::shared_ptr<ChunkSaver> threads[chunk_source.size()];
 
                     std::vector<std::thread> thread_arr;
                     down_Sptr dPtr = std::make_shared<Download>(Download(mtorrPtr->getHash(), mtorrPtr->getfileName(), destfilepath, chunk_source.size()));
-                    std::cout << "Total chunks to be downloaded: " << dPtr->getTotalChunks() << std::endl;
+                    //std::cout << "Total chunks to be downloaded: " << dPtr->getTotalChunks() << std::endl;
                     DownloadManager::getInstance().addFile(dPtr);
+                    ChunkDownloader chunkdownldr;
                     // download chunks
                     for (int i = 0; i < chunk_source.size(); i++)
                     {
-                        thread_arr.push_back(std::thread(&ChunkSaver::downloadChunk, ChunkSaver(destfilepath, mtorrPtr->getHash(), chunk_source[i], i)));
+                        //thread_arr.push_back(std::thread(&ChunkSaver::downloadChunk, ChunkSaver(destfilepath, mtorrPtr->getHash(), chunk_source[i], i)));
+                        // cout << "Thread index: " << i << endl;
                         //std::this_thread::sleep_for(std::chrono::milliseconds(4000));
+                        chunkdownldr.add(ChunkSaver(destfilepath, mtorrPtr->getHash(), chunk_source[i], i));
                     }
                     //waiting to get a signal from atleast 1 thread to update the tracker about seeding the file
+                    for (int i = 0; i < 8; i++)
                     {
+                        thread_arr.push_back(std::thread(&ChunkDownloader::downloadChunks, std::ref(chunkdownldr)));
                     }
                     for (auto &i : thread_arr)
                     {
@@ -155,14 +165,14 @@ void CommandHandler::handleCommand(std::string command)
             if (DownloadManager::getInstance().hasDownloaded(mtorrPtr->getHash()))
             {
                 int status = DownloadManager::getInstance().getDownloadStatus(mtorrPtr->getHash());
-                cout << "In command handler, getting file status: " << status << std::endl;
+                //cout << "In command handler, getting file status: " << status << std::endl;
                 if (status == 1)
                 {
                     RemoveSeeder req;
                     req.setHash(mtorrPtr->getHash());
                     req.setIp(ClientDatabase::getInstance().getHost().getIp());
                     req.setPort(ClientDatabase::getInstance().getHost().getPort());
-                    cout << "In command handler, sending remove seeder req: " << status << std::endl;
+                    //cout << "In command handler, sending remove seeder req: " << status << std::endl;
                     TrackerServiceServer trackerCommunicator(ClientDatabase::getInstance().getTracker1(), ClientDatabase::getInstance().getTracker2());
                     Response res = trackerCommunicator.removeSeederRequest(req);
                     if (res.getResponse() == "SUCCESS")

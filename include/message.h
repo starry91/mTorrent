@@ -182,7 +182,7 @@ public:
   std::string getStatus();
   SendChunkResponse(std::vector<char> &b);
   SendChunkResponse();
-  void setChunkData(std::vector<char> &data);
+  void setChunkData(std::vector<char> data);
   void setHash(std::string hash);
   void setChunkIndex(u_int32_t index);
   void setStatus(std::string status);

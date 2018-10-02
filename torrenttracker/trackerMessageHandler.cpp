@@ -41,7 +41,7 @@ Response TrackerMessageHandler::handleAddSeederRequest(std::vector<char> b)
     }
     catch (...)
     {
-        std::cout << "fail" << std::endl;
+        //std::cout << "fail" << std::endl;
         res.setResponse("FAIL");
         return res;
     }
@@ -81,7 +81,7 @@ SeederInfoResponse TrackerMessageHandler::handleGetSeedsRequest(std::vector<char
         auto seeder_list = database.getSeederList(m->getHash());
         for (auto i : seeder_list)
         {
-            cout << "handleGetSeedsRequest() adding seeder: " << i->getIp() << endl;
+            //cout << "handleGetSeedsRequest() adding seeder: " << i->getIp() << endl;
             res.addSeeder(*i);
         }
         res.setStatus("SUCCESS");
@@ -100,7 +100,6 @@ SyncSeederListResponse TrackerMessageHandler::handleSyncSeederRequest()
     LogHandler::getInstance().logMsg("Database: Reading seeder file");
     std::string file_path = TrackerDatabase::getInstance().getSeederFilePath();
     std::string line;
-    std::cout << "FilePath: " << file_path << std::endl;
     std::ifstream file(file_path, std::ios::binary);
     // std::vector<char> vec;
     // if (!file.eof() && !file.fail())
@@ -117,12 +116,9 @@ SyncSeederListResponse TrackerMessageHandler::handleSyncSeederRequest()
     std::vector<char> const vec(
         (std::istreambuf_iterator<char>(file)),
         (std::istreambuf_iterator<char>()));
-    std::cout << vec.size() << " bytes." << std::endl;
+    //std::cout << vec.size() << " bytes." << std::endl;
     SyncSeederListResponse res;
-    std::cout << "In Tr Message handler, Handle sync request: " << vec.size() << std::endl;
+    //std::cout << "In Tr Message handler, Handle sync request: " << vec.size() << std::endl;
     res.setBytes(vec);
-    for(auto i : vec) {
-        std::cout << i;
-    }
     return res;
 }

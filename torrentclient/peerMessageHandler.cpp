@@ -43,13 +43,13 @@ SendChunkResponse PeerMessageHandler::handlesendChunkRequest(std::vector<char> b
         fHandler.readFileChunk(m->getChunkId(), path, buf);
         res.setHash(m->getHash());
         res.setChunkIndex(m->getChunkId());
-        res.setChunkData(buf);
+        res.setChunkData(std::move(buf));
         res.setStatus("SUCCESS");
         return res;
     }
     catch (...)
     {
-        std::cout << "fail" << std::endl;
+        //std::cout << "fail" << std::endl;
         SendChunkResponse res;
         res.setHash(m->getHash());
         res.setChunkIndex(m->getChunkId());

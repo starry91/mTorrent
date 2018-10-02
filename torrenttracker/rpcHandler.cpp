@@ -8,6 +8,9 @@
 #include "errorMsg.h"
 #include "trackerDatabase.h"
 #include "TrackerServiceServer.h"
+#include <syslog.h>
+#include <unistd.h>
+
 
 using std::cout;
 using std::endl;
@@ -16,12 +19,12 @@ void RpcHandler::handleRpc(int client_fd)
 {
     try
     {
-        cout << "handleRpc() before while for fd: " << client_fd << endl;
+        //cout << "handleRpc() before while for fd: " << client_fd << endl;
         while (true)
         {
             NetworkReader reader(client_fd);
             auto byte_data = reader.readFromNetwork();
-            std::cout << "byte_data size: " << byte_data.size() << std::endl;
+            //std::cout << "byte_data size: " << byte_data.size() << std::endl;
             Decoder decoder;
             Encoder encoder;
             auto rpcbytepair = decoder.decodeMsgType(byte_data);
@@ -37,12 +40,12 @@ void RpcHandler::handleRpc(int client_fd)
             //std::string request = msg->getType();
             TrackerMessageHandler msgHandler;
             NetworkWriter writer(client_fd);
-            cout << "handleRpc() request type: " << request << endl;
+            //cout << "handleRpc() request type: " << request << endl;
             if (request == "SHARE")
             {
-                std::cout << "Recieved share request" << std::endl;
+                //std::cout << "Recieved share request" << std::endl;
                 LogHandler::getInstance().logMsg("Recieved share request");
-                std::cout << "hello1" << std::endl;
+                //std::cout << "hello1" << std::endl;
                 auto res = msgHandler.handleShareRequest(byte_data);
                 writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
                 if (res.getResponse() == "SUCCESS")
@@ -50,16 +53,16 @@ void RpcHandler::handleRpc(int client_fd)
                     TrackerDatabase::getInstance().updateSeederfile();
                     SyncShare sync_msg(byte_data);
                     TrackerServiceServer tracker2handler(TrackerDatabase::getInstance().getSecondayTracker());
-                    cout << "Update to secondary Tracker after connection: " << endl;
+                    //cout << "Update to secondary Tracker after connection: " << endl;
                     auto res = tracker2handler.syncshareFile(sync_msg);
-                    cout << "Update to secondary Tracker: " << res.getResponse() << endl;
+                    //cout << "Update to secondary Tracker: " << res.getResponse() << endl;
                 }
             }
             else if (request == "SYNCSHARE")
             {
-                std::cout << "Recieved share request" << std::endl;
+                //std::cout << "Recieved share request" << std::endl;
                 LogHandler::getInstance().logMsg("Recieved share request");
-                std::cout << "hello1" << std::endl;
+                //std::cout << "hello1" << std::endl;
                 auto res = msgHandler.handleShareRequest(byte_data);
                 writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
                 if (res.getResponse() == "SUCCESS")
@@ -69,9 +72,9 @@ void RpcHandler::handleRpc(int client_fd)
             }
             else if (request == "ADDSEEDER")
             {
-                std::cout << "Recieved AddSeeder request" << std::endl;
+                //std::cout << "Recieved AddSeeder request" << std::endl;
                 LogHandler::getInstance().logMsg("Recieved AddSeeder request");
-                std::cout << "hello2" << std::endl;
+                //std::cout << "hello2" << std::endl;
                 auto res = msgHandler.handleAddSeederRequest(byte_data);
                 writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
                 if (res.getResponse() == "SUCCESS")
@@ -79,16 +82,16 @@ void RpcHandler::handleRpc(int client_fd)
                     TrackerDatabase::getInstance().updateSeederfile();
                     SyncAddSeeder sync_msg(byte_data);
                     TrackerServiceServer tracker2handler(TrackerDatabase::getInstance().getSecondayTracker());
-                    cout << "Update to secondary Tracker after connection: " << endl;
+                    //cout << "Update to secondary Tracker after connection: " << endl;
                     auto res = tracker2handler.syncaddSeederRequest(sync_msg);
-                    cout << "Update to secondary Tracker: " << res.getResponse() << endl;
+                    //cout << "Update to secondary Tracker: " << res.getResponse() << endl;
                 }
             }
             else if (request == "SYNCADDSEEDER")
             {
-                std::cout << "Recieved AddSeeder request" << std::endl;
+                //std::cout << "Recieved AddSeeder request" << std::endl;
                 LogHandler::getInstance().logMsg("Recieved AddSeeder request");
-                std::cout << "hello2" << std::endl;
+                //std::cout << "hello2" << std::endl;
                 auto res = msgHandler.handleAddSeederRequest(byte_data);
                 writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
                 if (res.getResponse() == "SUCCESS")
@@ -98,9 +101,9 @@ void RpcHandler::handleRpc(int client_fd)
             }
             else if (request == "REMOVESEEDER")
             {
-                std::cout << "Recieved Remove Seeder request" << std::endl;
+                //std::cout << "Recieved Remove Seeder request" << std::endl;
                 LogHandler::getInstance().logMsg("Recieved Remove Seeder request");
-                std::cout << "hello3" << std::endl;
+                //std::cout << "hello3" << std::endl;
                 auto res = msgHandler.handleRemoveSeederRequest(byte_data);
                 writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
                 if (res.getResponse() == "SUCCESS")
@@ -108,16 +111,16 @@ void RpcHandler::handleRpc(int client_fd)
                     TrackerDatabase::getInstance().updateSeederfile();
                     SyncRemoveSeeder sync_msg(byte_data);
                     TrackerServiceServer tracker2handler(TrackerDatabase::getInstance().getSecondayTracker());
-                    cout << "Update to secondary Tracker after connection: " << endl;
+                    //cout << "Update to secondary Tracker after connection: " << endl;
                     auto res = tracker2handler.syncremoveSeederRequest(sync_msg);
-                    cout << "Update to secondary Tracker: " << res.getResponse() << endl;
+                    //cout << "Update to secondary Tracker: " << res.getResponse() << endl;
                 }
             }
             else if (request == "SYNCREMOVESEEDER")
             {
-                std::cout << "Recieved Remove Seeder request" << std::endl;
+                //std::cout << "Recieved Remove Seeder request" << std::endl;
                 LogHandler::getInstance().logMsg("Recieved Remove Seeder request");
-                std::cout << "hello3" << std::endl;
+                //std::cout << "hello3" << std::endl;
                 auto res = msgHandler.handleRemoveSeederRequest(byte_data);
                 writer.writeToNetwork(encoder.encode(std::string("RESPONSE"), res.getBytes()));
                 if (res.getResponse() == "SUCCESS")
@@ -127,7 +130,7 @@ void RpcHandler::handleRpc(int client_fd)
             }
             else if (request == "SEEDERINFOREQUEST")
             {
-                std::cout << "Recieved Seeder Info request" << std::endl;
+                //std::cout << "Recieved Seeder Info request" << std::endl;
                 LogHandler::getInstance().logMsg("Recieved SeederInfoRequest request");
                 //std::cout << "handleRpc() in SEEDERINFOREQUEST before handleGetSeedsRequest" << std::endl;
                 auto res = msgHandler.handleGetSeedsRequest(byte_data);
@@ -137,10 +140,10 @@ void RpcHandler::handleRpc(int client_fd)
             }
             else if (request == "SYNCSEEDERLISTREQUEST")
             {
-                std::cout << "Recieved Sync Seeder Info request" << std::endl;
+                //std::cout << "Recieved Sync Seeder Info request" << std::endl;
                 LogHandler::getInstance().logMsg("Recieved SeederInfoRequest request");
                 auto res = msgHandler.handleSyncSeederRequest();
-                std::cout << "Main tracker, msg size: " << res.getBytes().size() << std::endl;
+                //std::cout << "Main tracker, msg size: " << res.getBytes().size() << std::endl;
                 //std::cout << "handleRpc() in SEEDERINFOREQUEST after handleGetSeedsRequest" << std::endl;
                 writer.writeToNetwork(encoder.encode(std::string("SYNCSEEDERLISTRESPONSE"), res.getBytes()));
                 //std::cout << "handleRpc() in SEEDERINFOREQUEST after writing handleGetSeedsRequest" << std::endl;
@@ -156,6 +159,7 @@ void RpcHandler::handleRpc(int client_fd)
     }
     catch (ErrorMsg e)
     {
-        std::cout << "Exception received: " << e.getErrorMsg() << "For fd: " << client_fd << std::endl;
+        syslog(LOG_WARNING, "Exception received: %s, fd: %d", e.getErrorMsg().c_str(), client_fd);
     }
+    close(client_fd);
 }

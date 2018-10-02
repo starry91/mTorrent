@@ -16,8 +16,8 @@ LogHandler &LogHandler::getInstance()
 
 void LogHandler::logMsg(std::string msg)
 {
-    cout << "LOgged: [" << msg << "]" << endl;
-    std::cout << "printing log to: " << this->log_path << std::endl;
+    //cout << "LOgged: [" << msg << "]" << endl;
+    //std::cout << "printing log to: " << this->log_path << std::endl;
     std::ofstream outfile;
     outfile.open(this->log_path, std::ios_base::app);
     std::time_t result = std::time(nullptr);
@@ -26,8 +26,8 @@ void LogHandler::logMsg(std::string msg)
 }
 void LogHandler::logError(std::string msg)
 {
-    cout << "LOgged: [" << msg << "]" << endl;
-    std::cout << "printing log to: " << this->log_path << std::endl;
+    //cout << "LOgged: [" << msg << "]" << endl;
+    //std::cout << "printing log to: " << this->log_path << std::endl;
     std::ofstream outfile;
     outfile.open(this->log_path, std::ios_base::app);
     std::time_t result = std::time(nullptr);

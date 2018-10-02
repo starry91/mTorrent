@@ -33,7 +33,7 @@ void ClientDatabase::addMTorrent(mTorrent_Sptr torr)
     std::lock_guard<std::mutex> lock(this->seeder_mtx);
     if (this->files.find(torr->getHash()) == this->files.end())
     {
-        std::cout << "In Client Database, adding new torfile: " << torr->getfileName() << std::endl;
+        //std::cout << "In Client Database, adding new torfile: " << torr->getfileName() << std::endl;
         this->files[torr->getHash()] = torr;
     }
 }
@@ -86,7 +86,7 @@ void ClientDatabase::removeMTorrent(std::string hash)
 {
     if (this->files.find(hash) != this->files.end())
     {
-        std::cout << "In client database, Removing file: " << this->files[hash]->getfileName() << std::endl;
+        //std::cout << "In client database, Removing file: " << this->files[hash]->getfileName() << std::endl;
         this->files.erase(hash);
     }
 }

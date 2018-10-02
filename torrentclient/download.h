@@ -26,6 +26,7 @@ public:
   std::string getHash();
   std::string getFileName();
   int getTotalChunks();
+  int getDownloadedChunks();
   int getStatus();
   void updateChunkStatus(int index, int val);
   void incrementDownloadedChunks();

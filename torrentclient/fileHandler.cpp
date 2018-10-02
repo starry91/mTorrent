@@ -30,7 +30,7 @@ void FileHandler::createMTorrent(mTorrent_Sptr torr)
         // }
         syslog(0, "Writing file to: [%s]", torr->getPath().c_str());
         myfile << torr->getHash() << "\n";
-        cout << "In mtorr constructor, filename: " << torr->getfileName() << endl;
+       // cout << "In mtorr constructor, filename: " << torr->getfileName() << endl;
         myfile << torr->getfileName() << "\n";
         myfile << torr->getFileSize() << "\n";
         myfile << ClientDatabase::getInstance().getTracker1().getIp() << "\n";
@@ -158,18 +158,18 @@ void FileHandler::createEmptyFile(std::string path, long size)
     //create empty file
     std::fstream outfile;
     outfile.open(path, std::ios::trunc | std::ios::out | std::ios::binary);
-    cout << "In Filehandler, Creating empty file, file path: " << path << endl;
+    //cout << "In Filehandler, Creating empty file, file path: " << path << endl;
     if (outfile.is_open())
     {
-        std::cout << "In Filehandler, Creating empty file of size: " << size << std::endl;
-        char *buf = new char[size];
-        std::cout << "In Filehandler, Creating buffer of size: " << size << std::endl;
-        outfile.write(buf, size);
-        std::cout << "In Filehandler, Created empty file of size: " << size << std::endl;
+        //std::cout << "In Filehandler, Creating empty file of size: " << size << std::endl;
+        std::vector<char> buf(size);
+        //std::cout << "In Filehandler, Creating buffer of size: " << size << std::endl;
+        outfile.write(buf.data(), size);
+        //std::cout << "In Filehandler, Created empty file of size: " << size << std::endl;
     }
     else
     {
-        std::cout << "In Filehandler, unable to create empty file of size: " << size << std::endl;
+        //std::cout << "In Filehandler, unable to create empty file of size: " << size << std::endl;
     }
     outfile.close();
 }

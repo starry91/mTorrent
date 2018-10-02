@@ -356,21 +356,21 @@ SeederInfoResponse::SeederInfoResponse(std::vector<char> b)
   //hash
   uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   this->hash = std::string(&b[4], &b[4 + size]);
-  cout << "SeederInfoResponse() size, hash: " << size << this->hash << endl;
+  //cout << "SeederInfoResponse() size, hash: " << size << this->hash << endl;
   b.erase(b.begin(), b.begin() + 4 + size);
 
   //status
   size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   this->status = std::string(&b[4], &b[4 + size]);
-  cout << "SeederInfoResponse() size, status: " << size << this->status << endl;
+  //cout << "SeederInfoResponse() size, status: " << size << this->status << endl;
   b.erase(b.begin(), b.begin() + 4 + size);
 
   //seeder vector
   auto count = nvtouint32(std::vector<char>(&b[0], &b[4]));
   b.erase(b.begin(), b.begin() + 4);
-  cout << "SeederInfoResponse() count: " << count << endl;
+  //cout << "SeederInfoResponse() count: " << count << endl;
 
-  cout << "SeederInfoResponse() before for loop vec size: " << b.size() << endl;
+  //cout << "SeederInfoResponse() before for loop vec size: " << b.size() << endl;
 
   for (int i = 0; i < count; i++)
   {
@@ -696,9 +696,9 @@ SendChunkResponse::SendChunkResponse()
 }
 
 //Setters
-void SendChunkResponse::setChunkData(std::vector<char> &data)
+void SendChunkResponse::setChunkData(std::vector<char> data)
 {
-  this->chunk_data = data;
+  this->chunk_data = std::move(data);
 }
 
 void SendChunkResponse::setHash(std::string hash)
@@ -1124,7 +1124,7 @@ std::vector<char> SyncSeederListRequest::getBytes()
 //Constructors
 SyncSeederListResponse::SyncSeederListResponse(std::vector<char> b)
 {
-  std::cout << "In SyncSeederlist constructor, begenning" << std::endl;
+  //std::cout << "In SyncSeederlist constructor, begenning" << std::endl;
   for (auto i : b)
   {
     std::cout << i;
@@ -1133,11 +1133,7 @@ SyncSeederListResponse::SyncSeederListResponse(std::vector<char> b)
   uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   b.erase(b.begin(), b.begin() + 4);
   this->bytes = b;
-  std::cout << "In SyncSeederlist constructor, after" << std::endl;
-  for (auto i : b)
-  {
-    std::cout << i;
-  }
+  //std::cout << "In SyncSeederlist constructor, after" << std::endl;
 }
 
 SyncSeederListResponse::SyncSeederListResponse()

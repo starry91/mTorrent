@@ -49,11 +49,12 @@ void DownloadManager::addSeederRequestToTracker(std::string hash)
 
 void DownloadManager::printDownloads()
 {
-    std::cout << std::setw(15) << "File Name " << std::setw(8) << "Status" << std::endl;
+    std::cout << std::setw(15) << "File Name" << std::setw(10) << "Status" <<  std::setw(10) << "Progress" << std::endl;
     for (auto it : this->dMap)
     {
         auto file = it.second;
-        std::cout << std::setw(15) << file->getFileName() << std::setw(8) << (file->getStatus() == 1 ? "[S]" : "[D]") << std::endl;
+        std::cout << std::setw(15) << file->getFileName() << std::setw(10) 
+        << (file->getStatus() == 1 ? "[S]" : "[D]") << std::setw(9) << (file->getDownloadedChunks()*100.00)/file->getTotalChunks() << "%" << std::endl;
     }
 }
 

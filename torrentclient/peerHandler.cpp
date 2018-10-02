@@ -7,6 +7,7 @@
 #include "logHandler.h"
 #include "errorMsg.h"
 #include "clientDatabase.h"
+#include "unistd.h"
 
 using std::cout;
 using std::endl;
@@ -34,7 +35,7 @@ void PeerHandler::handleRpc(int client_fd)
             NetworkWriter writer(client_fd);
             if (request == "CHUNKINFOREQUEST")
             {
-                std::cout << "Recieved ChunkInfoRequest on" << ClientDatabase::getInstance().getHost().getPort() << std::endl;
+                //std::cout << "Recieved ChunkInfoRequest on" << ClientDatabase::getInstance().getHost().getPort() << std::endl;
                 LogHandler::getInstance().logMsg("Recieved ChunkInfoRequest request");
                 //std::cout << "PeerHandler::handleRpc() hello1" << std::endl;
                 auto res = msgHandler.handleChunkInfoRequest(byte_data);
@@ -42,7 +43,7 @@ void PeerHandler::handleRpc(int client_fd)
             }
             else if (request == "SENDCHUNKREQUEST")
             {
-                std::cout << "Recieved Send Chunk request on" << ClientDatabase::getInstance().getHost().getPort() << std::endl;
+                //std::cout << "Recieved Send Chunk request on" << ClientDatabase::getInstance().getHost().getPort() << std::endl;
                 LogHandler::getInstance().logMsg("Recieved Send Chunk request");
                 //std::cout << "PeerHandler::handleRpc() hello2" << std::endl;
                 auto res = msgHandler.handlesendChunkRequest(byte_data);
@@ -52,6 +53,7 @@ void PeerHandler::handleRpc(int client_fd)
     }
     catch (ErrorMsg e)
     {
-        std::cout << "PeerHandler::handleRpc() Exception received: " << e.getErrorMsg() << "For fd: " << client_fd << std::endl;
+        //std::cout << "PeerHandler::handleRpc() Exception received: " << e.getErrorMsg() << "For fd: " << client_fd << std::endl;
     }
+    close(client_fd);   
 }

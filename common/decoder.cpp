@@ -7,20 +7,10 @@ using std::endl;
 
 std::pair<std::string, std::vector<char>> Decoder::decodeMsgType(std::vector<char> b)
 {
-    for (auto i : b)
-    {
-        std::cout << i << std::endl;
-    }
     //cout << "in Decoder::decodeMsgType() vsc size: " << b.size() << endl;
     uint32_t type_size = nvtouint32(std::vector<char>(&b[0], &b[4]));
     //cout << "in Decoder::decodeMsgType() type size: " << type_size << endl;
     auto type = std::string(b.begin() + 4, b.begin() + 4 + type_size);
-    std::cout << "Decoded type: " << type << std::endl;
-    std::cout << "Next char: " << b[4 + type_size] << std::endl;
-    std::cout << "Next char: " << b[5 + type_size] << std::endl;
-    std::cout << "Next char: " << b[6 + type_size] << std::endl;
-    std::cout << "Next char: " << b[7 + type_size] << std::endl;
-    std::cout << "Next char: " << b[8 + type_size] << std::endl;
     // cout << "in Decoder::decodeMsgType() type: " << type << endl;
     b.erase(b.begin(), b.begin() + 4 + type_size);
     //cout << "in Decoder::decodeMsgType() vec after erase: " << b.size() << endl;

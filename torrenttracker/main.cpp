@@ -35,9 +35,9 @@ int main(int argc, char *argv[])
     // Seeder tracker1(std::string(strtok(argv[1], ":")), std::string(strtok(NULL, ":")));
     // Seeder tracker2(std::string(strtok(argv[2], ":")), std::string(strtok(NULL, ":")));
 
-    std::cout << "hello" << std::endl;
-    std::cout << "ip: " << tracker1.getIp() << " port: " << tracker1.getPort() << std::endl;
-    std::cout << "ip: " << tracker2.getIp() << " port: " << tracker2.getPort() << std::endl;
+    // std::cout << "hello" << std::endl;
+    // std::cout << "ip: " << tracker1.getIp() << " port: " << tracker1.getPort() << std::endl;
+    // std::cout << "ip: " << tracker2.getIp() << " port: " << tracker2.getPort() << std::endl;
 
     TrackerDatabase::getInstance().setLogPath(std::string(argv[4]));
     TrackerDatabase::getInstance().setMainTracker(tracker1);
@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
         perror("listen");
         exit(EXIT_FAILURE);
     }
+    std::cout << "Tracker Started..." << std::endl;
     while (true)
     {
         int cli_fd;
