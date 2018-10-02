@@ -20,6 +20,7 @@ ChunkInfoResponse PeerMessageHandler::handleChunkInfoRequest(std::vector<char> b
     }
     catch (...)
     {
+        //std::cout << "fail in info" << std::endl;
         ChunkInfoResponse res;
         res.setHash(m->getHash());
         res.setChunkInfo(std::vector<u_int32_t>(1, 1));
@@ -49,7 +50,7 @@ SendChunkResponse PeerMessageHandler::handlesendChunkRequest(std::vector<char> b
     }
     catch (...)
     {
-        //std::cout << "fail" << std::endl;
+        // std::cout << "fail" << std::endl;
         SendChunkResponse res;
         res.setHash(m->getHash());
         res.setChunkIndex(m->getChunkId());

@@ -5,6 +5,7 @@
 #include <syslog.h>
 #include "logHandler.h"
 #include <fstream>
+#include "errorMsg.h"
 using std::cout;
 using std::endl;
 
@@ -112,7 +113,7 @@ SyncSeederListResponse TrackerMessageHandler::handleSyncSeederRequest()
     //     file.read(&vec[0], fileSize);
     // }
     if (file.fail())
-        throw 0;
+        throw ErrorMsg("Unable to read seeder file");
     std::vector<char> const vec(
         (std::istreambuf_iterator<char>(file)),
         (std::istreambuf_iterator<char>()));

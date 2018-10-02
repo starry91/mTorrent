@@ -1,5 +1,5 @@
 #include "clientDatabase.h"
-
+#include "errorMsg.h"
 ClientDatabase::ClientDatabase(){};
 
 ClientDatabase &ClientDatabase::getInstance()
@@ -56,7 +56,14 @@ Seeder ClientDatabase::getTracker2()
 mTorrent_Sptr ClientDatabase::getmTorrent(std::string hash)
 {
     //handle error
-    return this->files[hash];
+    if (this->files.find(hash) != this->files.end())
+    {
+        return this->files[hash];
+    }
+    else
+    {
+        throw ErrorMsg("Could not find file entry for hash");
+    }
 }
 
 bool ClientDatabase::hasFile(std::string hash)

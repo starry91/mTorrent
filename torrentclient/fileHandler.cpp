@@ -7,6 +7,8 @@
 #include "seeder.h"
 #include "openssl/sha.h"
 #include "errorMsg.h"
+#include <errno.h>
+#include <string.h>
 
 using std::cout;
 using std::endl;
@@ -169,6 +171,7 @@ void FileHandler::createEmptyFile(std::string path, long size)
     }
     else
     {
+        throw ErrorMsg("Could not create file: " + std::string(strerror(errno)));
         //std::cout << "In Filehandler, unable to create empty file of size: " << size << std::endl;
     }
     outfile.close();

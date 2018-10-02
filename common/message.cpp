@@ -1124,11 +1124,11 @@ std::vector<char> SyncSeederListRequest::getBytes()
 //Constructors
 SyncSeederListResponse::SyncSeederListResponse(std::vector<char> b)
 {
-  //std::cout << "In SyncSeederlist constructor, begenning" << std::endl;
-  for (auto i : b)
-  {
-    std::cout << i;
-  }
+  // std::cout << "In SyncSeederlist constructor, begenning" << std::endl;
+  // for (auto i : b)
+  // {
+  //   std::cout << i;
+  // }
   //hash
   uint32_t size = nvtouint32(std::vector<char>(&b[0], &b[4]));
   b.erase(b.begin(), b.begin() + 4);

@@ -25,6 +25,10 @@ void ChunkSaver::downloadChunk()
     std::fstream outfile;
     outfile.open(filepath);
     outfile.seekg(CHUNK_SIZE * chunkindex, std::ios::beg);
+    if (seederlist.size() == 0)
+    {
+        return;
+    }
     int index = rand() % this->seederlist.size();
     //std::cout << "Random index: " << index << std::endl;
     TrackerServiceServer seeder(this->seederlist[index]);
@@ -50,7 +54,9 @@ void ChunkSaver::downloadChunk()
         ClientDatabase::getInstance().addMTorrent(mTorr);
         ClientDatabase::getInstance().updateChunkInfo(this->hash, chunkindex, 1);
         DownloadManager::getInstance().addSeederRequestToTracker(this->hash);
-    } else {
+    }
+    else
+    {
         syslog(LOG_ERR, "Chunk hash failed, expected: %s, received: %s", hash.substr(20 * chunkindex, 20).c_str(), getChunkHash(resp.getChunkdata()).c_str());
     }
     outfile.close();

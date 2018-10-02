@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     Seeder tracker1(ip_1, port_1);
     Seeder tracker2(ip_2, port_2);
     LogHandler::getInstance().setLogPath(std::string(argv[4]));
-    LogHandler::getInstance().logMsg("Client started");
+    LogHandler::getInstance().logMsg("Tracker started");
     //throws logic error
     // Seeder tracker1(std::string(strtok(argv[1], ":")), std::string(strtok(NULL, ":")));
     // Seeder tracker2(std::string(strtok(argv[2], ":")), std::string(strtok(NULL, ":")));

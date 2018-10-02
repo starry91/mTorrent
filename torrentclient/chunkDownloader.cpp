@@ -1,5 +1,6 @@
 #include "chunkDownloader.h"
 #include "errorMsg.h"
+#include <syslog.h>
 
 ChunkDownloader::ChunkDownloader(){};
 
@@ -41,5 +42,6 @@ void ChunkDownloader::downloadChunks()
     }
     catch (ErrorMsg e)
     {
+        syslog(LOG_WARNING, "Download stopped: %s", e.getErrorMsg().c_str());   
     }
 }

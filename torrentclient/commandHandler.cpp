@@ -26,7 +26,7 @@ void CommandHandler::handleCommand(std::string command)
     try
     {
         std::vector<std::string> args = extractArgs(command);
-        if (args[0] == "share" && args.size() == 3)
+        if (args.size() == 3 && args[0] == "share")
         {
             //cout << "In share" << endl;
             FileHandler filehandler;
@@ -59,7 +59,7 @@ void CommandHandler::handleCommand(std::string command)
                 this->printResponse(msg.getType(), res);
             }
         }
-        else if (args[0] == "download" && args.size() == 3)
+        else if (args.size() == 3 && args[0] == "get")
         {
             FileHandler fhandler;
             auto mtorrPtr = fhandler.readMTorrent(args[1]);
@@ -85,38 +85,42 @@ void CommandHandler::handleCommand(std::string command)
                 {
                     std::vector<std::vector<Seeder>> chunk_source(mtorrPtr->getBitChunks().size());
 
+                    int activeSeeders = 0;
                     for (auto s : res.getSeeders())
                     {
+                        // cout << "Seeder: " << s.getIp() << ":" << s.getPort() << endl;
+                        // cout << "Host: " << ClientDatabase::getInstance().getHost().getIp() << ":" << ClientDatabase::getInstance().getHost().getPort() << endl;
+
+                        if (s.getIp() == ClientDatabase::getInstance().getHost().getIp() && s.getPort() == ClientDatabase::getInstance().getHost().getPort())
+                        {
+                            // cout << "Skipping: " << s.getIp() << ":" << s.getPort() << endl;
+                            continue;
+                        }
                         TrackerServiceServer seeder(s);
                         ChunkInfoRequest req;
                         req.setHash(mtorrPtr->getHash());
                         auto resp = seeder.getChunkInfo(req);
+                        //cout << "status: " << resp.getStatus() << std::endl;
+                        if (resp.getStatus() == "FAIL")
+                        {
+                            continue;
+                        }
+                        activeSeeders++;
                         //cout << "Chunk info response: " << resp.getHash() << endl;
                         for (int i = 0; i < resp.getChunkInfo().size(); i++)
                         {
+                            // cout << "Seeder: " << s.getIp() << ":" <<s.getPort() << endl;
                             //cout << "Chunk " << i << ", value: " << resp.getChunkInfo()[i] << endl;
-                            if (resp.getChunkInfo()[i] == 1
-                            && (s.getIp() != ClientDatabase::getInstance().getHost().getPort()
-                                || s.getPort() != ClientDatabase::getInstance().getHost().getPort())
-                            )
+                            if (resp.getChunkInfo()[i] == 1)
                             {
                                 chunk_source[i].push_back(s);
                             }
                         }
                         //chunk_info_map[s.getIp() + ":" + s.getPort()] = resp;
                     }
-
-                    //create empty file
-                    // auto filename = mtorrPtr->getfileName().substr(mtorrPtr->getfileName().find_last_of("/") + 1);
-                    // auto destfilepath = args[2] + "/" + filename;
                     auto destfilepath = args[2] + "/" + mtorrPtr->getfileName();
                     // cout << "In downoad, destfilepath: " << destfilepath << endl;
                     fhandler.createEmptyFile(destfilepath, mtorrPtr->getFileSize());
-
-                    // cout << "Int download, after creating empty file: " << destfilepath << endl;
-                    //cout << "CommandHandler::handleCommand() File name:    " << mtorrPtr->getfileName() << endl;
-
-                    //std::shared_ptr<ChunkSaver> threads[chunk_source.size()];
 
                     std::vector<std::thread> thread_arr;
                     down_Sptr dPtr = std::make_shared<Download>(Download(mtorrPtr->getHash(), mtorrPtr->getfileName(), destfilepath, chunk_source.size()));
@@ -141,7 +145,14 @@ void CommandHandler::handleCommand(std::string command)
                         if (i.joinable())
                             i.join();
                     }
-                    std::cout << "Download Complete" << endl;
+                    if (activeSeeders)
+                    {
+                        std::cout << "Download Complete" << endl;
+                    }
+                    else
+                    {
+                        std::cout << "Download Failed: No active seeders" << endl;
+                    }
                 }
                 else
                 {
@@ -154,11 +165,11 @@ void CommandHandler::handleCommand(std::string command)
             }
             //auto seeders = this->getSeeders(args[1]);
         }
-        else if (args[0] == "show" && args.size() == 2 && args[1] == "downloads")
+        else if (args.size() == 2 && args[0] == "show" && args[1] == "downloads")
         {
             DownloadManager::getInstance().printDownloads();
         }
-        else if (args[0] == "remove" && args.size() == 2)
+        else if (args.size() == 2 && args[0] == "remove")
         {
             FileHandler fhandler;
             auto mtorrPtr = fhandler.readMTorrent(args[1]);
