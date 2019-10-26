@@ -1,21 +1,28 @@
 # mtorrent
 A bit torrent like file sharing system with fallback multi-tracker system with synchronization and parallel downloading.
-Implemented own RPC mechanism, message encoding and methods for message serialization and de-serialization
-Used openssl library for computing hash values of files
+Implemented own RPC mechanism, message encoding and methods for message serialization and de-serialization. Used openssl library for computing hash values of files(SHA1)
 
 ![Screenshot](archi.png)
 
 ## Parallel Download algorithm:
-Create a 2-D map of chunk index - list of peers having that chunk of the file
-For each chunk index i:
-    Generate a random number x of range (0, len(peer_list_of_chunk))
-    Download chunk i from the peer present at index x
+1. Create a 2-D map of chunk index - list of peers having that chunk of the file
+2. For each chunk index i:
+    - Generate a random number x of range (0, len(peer_list_of_chunk))
+    - Download chunk i from the peer present at index x
 
 ### Message Format
 ![](messageFormat.png)
 
+1. Magic start: Indicates the start of a new message
+2. Msg Type size: Size(in bytes) of the message type, ie, number of bytes to read to get the message type
+3. Msg type: Actual message type(ex: share, etc)
+4. Payload size: Size(in bytes) of the entire payload, ie, number of bytes to read to get entire payload
+5. Payload: Payload in bytes
+6. Magic end: Indicates the end of the message
+7. Payload can constitute of a number of arguments, each appened by the arg size(in bytes) to indicate the number of bytes to read to retrive the argument
+
 ## Message Types:
-Inspired from Protocol buffers, created a generic Message class and used inheritance to create class for each message type
+Inspired from Protocol buffers, created a generic Message class and used inheritance to create class for each message type.
 Implemented class methods for message serialization and de-serialization
 
 1. Share: Share file request to the tracker
